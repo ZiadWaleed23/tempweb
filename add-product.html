@@ -71,6 +71,8 @@
       <div class="field">
         <label>Brand</label>
         <select id="f-brand"></select>
+        <input type="text" id="f-brand-new" placeholder="New brand name" style="display:none; margin-top:8px;">
+        <p class="hint" id="brand-new-hint" style="display:none;"></p>
       </div>
       <div class="field">
         <label>Category</label>
@@ -139,13 +141,28 @@
 
   const brandSelect = document.getElementById("f-brand");
   const categorySelect = document.getElementById("f-category");
+  const brandNewInput = document.getElementById("f-brand-new");
+  const brandNewHint = document.getElementById("brand-new-hint");
+  const NEW_BRAND_VALUE = "__new_brand__";
+
   if (typeof SITE_CONFIG !== "undefined") {
-    brandSelect.innerHTML = SITE_CONFIG.brands.map(b => `<option value="${b.id}">${b.name}</option>`).join("");
+    brandSelect.innerHTML = SITE_CONFIG.brands.map(b => `<option value="${b.id}">${b.name}</option>`).join("")
+      + `<option value="${NEW_BRAND_VALUE}">+ Add new brand…</option>`;
     categorySelect.innerHTML = SITE_CONFIG.categories.map(c => `<option value="${c.id}">${c.name}</option>`).join("");
   } else {
-    brandSelect.innerHTML = `<option value="">(type brand id manually in products.js)</option>`;
+    brandSelect.innerHTML = `<option value="">(type brand id manually in products.js)</option>`
+      + `<option value="${NEW_BRAND_VALUE}">+ Add new brand…</option>`;
     categorySelect.innerHTML = `<option value="">(type category id manually in products.js)</option>`;
   }
+
+  brandSelect.addEventListener("change", () => {
+    const isNew = brandSelect.value === NEW_BRAND_VALUE;
+    brandNewInput.style.display = isNew ? "block" : "none";
+    brandNewHint.style.display = isNew ? "block" : "none";
+    if (isNew) {
+      brandNewHint.textContent = "This brand isn't in config.js yet — after generating, add it to the brands array too (snippet will be shown below).";
+    }
+  });
 
   function esc(str) {
     return String(str || "").replace(/\\/g, "\\\\").replace(/"/g, '\\"');
@@ -162,10 +179,19 @@
       ? `\n    gallery: [${galleryLines.map(g => `"${esc(g)}"`).join(", ")}],`
       : "";
 
+    const isNewBrand = brandSelect.value === NEW_BRAND_VALUE;
+    const newBrandName = brandNewInput.value.trim();
+    const brandValue = isNewBrand ? slugify(newBrandName || "new-brand") : brandSelect.value;
+
+    let brandSnippet = "";
+    if (isNewBrand && newBrandName) {
+      brandSnippet = `\n\n// Also add this new brand to the "brands" array in js/config.js:\n{ id: "${esc(brandValue)}", name: "${esc(newBrandName)}" },`;
+    }
+
     const code = `  {
     id: "${esc(id)}",
     name: "${esc(nameEl.value)}",
-    brand: "${esc(brandSelect.value)}",
+    brand: "${esc(brandValue)}",
     category: "${esc(categorySelect.value)}",
     subcategory: "${esc(document.getElementById("f-subcategory").value)}",
     description: "${esc(document.getElementById("f-description").value)}",
@@ -174,7 +200,7 @@
     bestseller: ${document.getElementById("f-bestseller").checked},
     dateAdded: "${document.getElementById("f-date").value}",
     tags: [${tags.map(t => `"${esc(t)}"`).join(", ")}]
-  },`;
+  },${brandSnippet}`;
 
     document.getElementById("output").value = code;
     document.getElementById("output-card").classList.add("is-visible");

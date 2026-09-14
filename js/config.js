@@ -27,7 +27,7 @@ const SITE_CONFIG = {
     whatsapp: "+971 50 900 7659",
     whatsappLink: "https://wa.me/971509007659",
     location: "حدائق الأهرام - 118",
-    hours: "Mon – Fri, 9:00 – 18:00"
+    hours: "Sun – Thu, 10 A.M – 8 P.M"
   },
 
   social: {
@@ -122,7 +122,9 @@ const SITE_CONFIG = {
     { id: "remedium",      name: "REMEDIUM" },
     { id: "rablanca",      name: "RABLANCA" },
     { id: "medisupply",    name: "MEDISUPPLY" },
-    { id: "clinic-select", name: "CLINIC SELECT" }
+    { id: "clinic-select", name: "CLINIC SELECT" },
+    { id: "reluma",        name: "Reluma" },
+    { id: "axeniq",        name: "AxeniQ" },
   ],
 
   // ---------------------------------------------------------------------
