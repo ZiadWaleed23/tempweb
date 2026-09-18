@@ -323,6 +323,48 @@ function renderBestSellers() {
 }
 
 /* -------------------------------------------------------------------------
+   Stats band: count-up when scrolled into view (homepage only)
+   The final value is already in the HTML, so it still reads correctly
+   without JS, with reduced-motion, or if IntersectionObserver is missing.
+   ------------------------------------------------------------------------- */
+function initStatsCounters() {
+  const nums = $$("[data-count-to]");
+  if (!nums.length) return;
+  const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if (reduce || !("IntersectionObserver" in window)) return;
+
+  const animate = el => {
+    // Read the number straight from the visible text, so editing the HTML is enough.
+    const raw = el.dataset.countFinal || el.textContent.trim();
+    el.dataset.countFinal = raw;
+    const m = raw.match(/^([\d][\d,\.]*)(.*)$/);
+    if (!m) return;
+    const useCommas = m[1].includes(",");
+    const target = parseFloat(m[1].replace(/,/g, ""));
+    const suffix = m[2];
+    if (isNaN(target)) return;
+    const duration = 1600;
+    const start = performance.now();
+    const fmt = n => (useCommas ? n.toLocaleString("en-US") : String(n));
+    const tick = now => {
+      const t = Math.min((now - start) / duration, 1);
+      const eased = 1 - Math.pow(1 - t, 3);
+      el.textContent = fmt(Math.round(target * eased)) + suffix;
+      if (t < 1) requestAnimationFrame(tick);
+      else el.textContent = raw;
+    };
+    requestAnimationFrame(tick);
+  };
+
+  const io = new IntersectionObserver((entries, obs) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) { animate(entry.target); obs.unobserve(entry.target); }
+    });
+  }, { threshold: 0.4 });
+  nums.forEach(n => io.observe(n));
+}
+
+/* -------------------------------------------------------------------------
    Init
    ------------------------------------------------------------------------- */
 document.addEventListener("DOMContentLoaded", () => {
@@ -332,4 +374,5 @@ document.addEventListener("DOMContentLoaded", () => {
   Cart.updateCount();
   renderFeaturedProducts();
   renderBestSellers();
+  initStatsCounters();
 });
