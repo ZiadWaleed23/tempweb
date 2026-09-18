@@ -136,3 +136,25 @@
 @media (max-width: 380px) {
   .product-grid { grid-template-columns: 1fr; }
 }
+
+/* ---------------------------------------------------------------------
+   STATS BAND — responsive
+   --------------------------------------------------------------------- */
+@media (max-width: 1080px) {
+  .stats-band__grid { grid-template-columns: repeat(2, 1fr); }
+  .stats-band__item { padding: 44px 16px; }
+  /* reset desktop dividers, then draw: vertical for right column, horizontal for bottom row */
+  .stats-band__item + .stats-band__item::before { display: none; }
+  .stats-band__item:nth-child(even)::before {
+    display: block; left: 0; top: 25%; bottom: 25%; width: 1px;
+  }
+  .stats-band__item:nth-child(n+3)::after {
+    content: ""; position: absolute; top: 0; left: 15%; right: 15%; height: 1px;
+    background: rgba(247,241,236,0.14);
+  }
+}
+@media (max-width: 640px) {
+  .stats-band__item { padding: 34px 10px; }
+  .stats-band__number { font-size: 2.1rem; }
+  .stats-band__label { font-size: 0.68rem; letter-spacing: 0.1em; }
+}
