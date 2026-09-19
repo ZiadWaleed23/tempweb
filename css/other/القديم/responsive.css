@@ -47,7 +47,7 @@
     position: fixed;
     inset: 0;
     z-index: 800;
-    background: rgba(58,42,77,0.5);
+    background: rgba(27,25,24,0.5);
   }
   .filter-panel-overlay.is-open { display: block; }
   #filter-panel.is-open ~ .filter-panel-overlay,
@@ -150,7 +150,7 @@
   }
   .stats-band__item:nth-child(n+3)::after {
     content: ""; position: absolute; top: 0; left: 15%; right: 15%; height: 1px;
-    background: rgba(58,42,77,0.2);
+    background: rgba(247,241,236,0.14);
   }
 }
 @media (max-width: 640px) {
