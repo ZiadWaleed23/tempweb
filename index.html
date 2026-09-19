@@ -5,9 +5,12 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>AESTHERA — Elevating Aesthetic Excellence</title>
 <meta name="description" content="AESTHERA is a curated portfolio of professional aesthetic and beauty products for clinics and skincare professionals.">
+<!-- First-visit loader (must stay before the stylesheets) -->
+<script src="js/loader.js"></script>
 <link rel="stylesheet" href="css/style.css">
 <link rel="stylesheet" href="css/responsive.css">
 <link rel="stylesheet" href="css/hero-split.css">
+<link rel="stylesheet" href="css/categories-carousel.css">
 </head>
 <body>
 
@@ -108,15 +111,25 @@
   </div>
 </section>
 
-<!-- ============================= BEST SELLERS ============================= -->
+<!-- ============================= CATEGORIES CAROUSEL ============================= -->
 <section class="section">
   <div class="container">
-    <div class="section__head">
-      <div class="section__eyebrow-line"></div>
-      <h2>Best Sellers</h2>
-      <p>The products most frequently requested by our professional partners.</p>
+    <div class="section__head-row" style="margin-bottom: 40px;">
+      <div class="section__head" style="margin-bottom:0;">
+        <div class="section__eyebrow-line"></div>
+        <h2>Our Categories</h2>
+        <p>Explore our professional portfolio by treatment category.</p>
+      </div>
+      <a href="products.html" class="btn btn--outline">
+        View All
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" style="margin-left:6px;vertical-align:-2px;"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </a>
     </div>
-    <div class="product-grid product-row" id="bestsellers-grid"></div>
+    <div class="cat-carousel">
+      <button class="cat-carousel__arrow cat-carousel__arrow--prev" id="cat-prev" aria-label="Previous categories"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 5l-7 7 7 7"/></svg></button>
+      <div class="cat-carousel__track" id="categories-carousel-track"></div>
+      <button class="cat-carousel__arrow cat-carousel__arrow--next" id="cat-next" aria-label="Next categories"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 5l7 7-7 7"/></svg></button>
+    </div>
   </div>
 </section>
 
@@ -231,6 +244,7 @@
 <script src="js/app.js"></script>
 <script src="js/filters.js"></script>
 <script src="js/search.js"></script>
+<script src="js/categories-carousel.js"></script>
 <script src="js/animations.js"></script>
 </body>
 </html>
