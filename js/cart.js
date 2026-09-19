@@ -33,7 +33,7 @@ const CartPage = {
     if (this.countEl) {
       this.countEl.textContent = items.length
         ? `${items.length} item${items.length === 1 ? "" : "s"} in your cart`
-        : "Your cart is currently empty.";
+        : "Your next favorite product is waiting.";
     }
 
     if (!items.length) {
