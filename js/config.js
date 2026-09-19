@@ -46,37 +46,37 @@ const SITE_CONFIG = {
       id: "botox",
       name: "Botulinum Toxin",
       description: "Injectable neuromodulators for the treatment of dynamic wrinkles and hyperhidrosis.",
-      image: "https://picsum.photos/seed/aesthera-cat-botox/900/1100"
+      image: "https://beauty-vt.com/wp-content/uploads/2022/10/botulinum-toxin-in-aesthetic-medicine-everything-you-need-to-know.jpg"
     },
     {
       id: "dermal-fillers",
       name: "Dermal Fillers",
       description: "Hyaluronic-acid, PLLA and calcium-hydroxyapatite based volumizing and contouring formulations for professional aesthetic use.",
-      image: "https://picsum.photos/seed/aesthera-cat-fillers/900/1100"
+      image: "https://www.beautifi.com/wp-content/uploads/2021/12/23.-Dermal-Fillers.jpeg"
     },
     {
       id: "skin-boosters",
       name: "Skin Boosters",
       description: "Bio-revitalizing injectable treatments formulated to support skin hydration, quality and radiance.",
-      image: "https://picsum.photos/seed/aesthera-cat-boosters/900/1100"
+      image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS4trJCcNqkFpDTco02n6IxH47gXrZXIWSbpBIIZ25vGw&s=10"
     },
     {
       id: "mesotherapy",
       name: "Mesotherapy",
       description: "Ampoules and vial complexes used in mesotherapy sessions for skin, hair and body revitalization.",
-      image: "https://picsum.photos/seed/aesthera-cat-meso/900/1100"
+      image: "https://prp-london.com/images/mesotherapy-hair-scalp-london.webp"
     },
     {
       id: "cold-peeling",
       name: "Cold Peeling",
       description: "Non-thermal peeling solutions for surface renewal without downtime.",
-      image: "https://picsum.photos/seed/aesthera-cat-peeling/900/1100"
+      image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQQUUmUEfkMGAmJM3CT8FPKWsl4Qhi8kcd5xgeFDodPT-b10iyniXKGi3I&s=10"
     },
     {
       id: "disposables",
       name: "Disposables & Accessories",
       description: "Cannulas, needles and injection accessories for professional aesthetic procedures.",
-      image: "https://picsum.photos/seed/aesthera-cat-disposables/900/1100"
+      image: "https://www.theaestheticsociety.org/sites/default/files/styles/tas_wide_l_3_2/public/content/hero/2021-09/_5ccc6e112986b.jpg?h=0ac13cd6&itok=4HxsfGQ0"
     }
   ],
 
