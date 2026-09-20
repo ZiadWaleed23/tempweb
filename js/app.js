@@ -23,22 +23,64 @@ function getBrandById(id) {
    Cart (persisted in localStorage)
    ------------------------------------------------------------------------- */
 const Cart = {
-  KEY: "aesthera_cart",
-  get() {
-    try { return JSON.parse(localStorage.getItem(this.KEY)) || []; }
-    catch (e) { return []; }
+  KEY: "Elio_cart",
+  MAX_QTY: 99,
+
+  /* Storage format: { "<productId>": quantity }.
+     Older visits stored a plain array of ids — that is migrated on read,
+     so nobody's existing cart is lost. */
+  _read() {
+    let raw;
+    try { raw = JSON.parse(localStorage.getItem(this.KEY)); } catch (e) { raw = null; }
+    const map = Object.create(null);   // no inherited keys like "constructor"
+    if (Array.isArray(raw)) {
+      raw.forEach(id => { if (typeof id === "string") map[id] = (map[id] || 0) + 1; });
+    } else if (raw && typeof raw === "object") {
+      Object.keys(raw).forEach(id => {
+        const q = Math.floor(Number(raw[id]));
+        if (q > 0) map[id] = Math.min(q, this.MAX_QTY);
+      });
+    }
+    return map;
   },
-  has(id) { return this.get().includes(id); },
-  toggle(id) {
-    let list = this.get();
-    if (list.includes(id)) list = list.filter(x => x !== id);
-    else list.push(id);
-    localStorage.setItem(this.KEY, JSON.stringify(list));
+  _write(map) {
+    try { localStorage.setItem(this.KEY, JSON.stringify(map)); } catch (e) { /* storage full / blocked */ }
     this.updateCount();
-    return list.includes(id);
   },
+
+  /* Product ids in the cart (same return shape as before) */
+  get() { return Object.keys(this._read()); },
+  /* [{ id, qty }] — used by the cart page */
+  entries() { return Object.entries(this._read()).map(([id, qty]) => ({ id, qty })); },
+  has(id) { return id in this._read(); },
+  qty(id) { return this._read()[id] || 0; },
+  totalQty() { return Object.values(this._read()).reduce((sum, q) => sum + q, 0); },
+
+  /* Add/remove toggle used by the heart-style cart buttons on cards + modal */
+  toggle(id) {
+    const map = this._read();
+    if (id in map) delete map[id];
+    else map[id] = 1;
+    this._write(map);
+    return id in map;
+  },
+  setQty(id, qty) {
+    const map = this._read();
+    qty = Math.floor(Number(qty));
+    if (!(id in map) || isNaN(qty)) return;
+    if (qty < 1) qty = 1;                       // use remove() to delete
+    map[id] = Math.min(qty, this.MAX_QTY);
+    this._write(map);
+  },
+  remove(id) {
+    const map = this._read();
+    delete map[id];
+    this._write(map);
+  },
+  clear() { this._write({}); },
+
   updateCount() {
-    const count = this.get().length;
+    const count = this.totalQty();
     $$(".js-cart-count").forEach(el => {
       el.textContent = count;
       el.classList.toggle("is-visible", count > 0);
@@ -46,10 +88,24 @@ const Cart = {
   }
 };
 
+/* Keep the header counter in sync when the cart changes in another tab */
+window.addEventListener("storage", e => {
+  if (e.key === Cart.KEY) Cart.updateCount();
+});
+
 /* -------------------------------------------------------------------------
    Product card + detail markup builders
    Used by index.html (featured/bestsellers) and products.html (grid)
    ------------------------------------------------------------------------- */
+/* Price line shared by cards and the product modal (prices live in prices.js) */
+function priceMarkup(product, className) {
+  if (typeof getPrice !== "function") return "";   // prices.js not loaded on this page
+  const price = getPrice(product);
+  return price === null
+    ? `<p class="${className} ${className}--request">${formatPrice(null)}</p>`
+    : `<p class="${className}">${formatPrice(price)}</p>`;
+}
+
 function buildProductCard(product) {
   const cat = getCategoryById(product.category);
   const brandName = getBrandById(product.brand);
@@ -73,6 +129,7 @@ function buildProductCard(product) {
     <div class="product-card__body">
       <p class="product-card__eyebrow">${brandName} &nbsp;·&nbsp; ${cat ? cat.name : ""}</p>
       <h3 class="product-card__title">${product.name}</h3>
+      ${priceMarkup(product, "product-card__price")}
       <button class="btn btn--outline btn--small product-card__view" data-view-id="${product.id}">View Product</button>
     </div>
   `;
@@ -145,6 +202,7 @@ function openProductModal(productId) {
       <div class="modal-product__info">
         <p class="modal-product__eyebrow">${brandName} &nbsp;·&nbsp; ${cat ? cat.name : ""}</p>
         <h2 class="modal-product__title" id="modal-title">${product.name}</h2>
+        ${priceMarkup(product, "modal-product__price")}
         <p class="modal-product__desc">${product.description}</p>
 
         <table class="modal-product__specs">

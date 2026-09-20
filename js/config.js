@@ -11,7 +11,7 @@ const SITE_CONFIG = {
   // BRAND
   // ---------------------------------------------------------------------
   brand: {
-    name: "AESTHERA",
+    name: "Elio",
     tagline: "Elevating Aesthetic Excellence.",
     shortDescription:
       "A curated portfolio of professional aesthetic and beauty products, selected for clinics and skincare professionals who expect more.",
@@ -22,18 +22,18 @@ const SITE_CONFIG = {
   // CONTACT & SOCIAL — placeholders, replace with real details
   // ---------------------------------------------------------------------
   contact: {
-    email: "hello@aesthera.com",
+    email: "hello@elio.com",
     phone: "+971 4 880 7659",
     whatsapp: "+971 50 900 7659",
     whatsappLink: "https://wa.me/971509007659",
-    location: "حدائق الأهرام - 118",
+    location: "Hadaek Al-Ahram - 118",
     hours: "Sun – Thu, 10 A.M – 8 P.M"
   },
 
   social: {
-    instagram: "https://instagram.com/aesthera",
-    facebook: "https://facebook.com/aesthera",
-    linkedin: "https://linkedin.com/company/aesthera"
+    instagram: "https://instagram.com/elio",
+    facebook: "https://facebook.com/elio",
+    linkedin: "https://linkedin.com/company/elio"
   },
 
   // ---------------------------------------------------------------------

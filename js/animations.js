@@ -1,5 +1,5 @@
 /* =========================================================================
-   ANIMATIONS.JS  —  AESTHERA
+   ANIMATIONS.JS  —  Elio
    ملف مستقل بالكامل للأنيميشن (CSS + JS في ملف واحد).
    - مبيغيّرش أي حاجة في الكود الأساسي (HTML / style.css / app.js ...).
    - بيضيف CSS الخاص بيه لوحده ويشتغل فوق الموجود.
@@ -164,7 +164,7 @@ ${R} .value-item:hover .value-item__icon { translate: 0 -6px; }
   css = css.replace("aa-KIND", "aa-up");
 
   const style = document.createElement("style");
-  style.id = "aesthera-animations";
+  style.id = "Elio-animations";
   style.textContent = css;
   document.head.appendChild(style);
   document.documentElement.classList.add("aa-ready");

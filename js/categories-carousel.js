@@ -1,5 +1,5 @@
 /* =========================================================================
-   CATEGORIES-CAROUSEL.JS — AESTHERA
+   CATEGORIES-CAROUSEL.JS — Elio
    كاروسيل الأقسام (من SITE_CONFIG.categories في config.js).
    - لفّ مستمر وناعم (requestAnimationFrame) بدل القفزات: بيمشي بسرعة ثابتة
      بالبكسل في الثانية، ومفيش نهاية — بيلف في دايرة من غير ما يرجع لورا.

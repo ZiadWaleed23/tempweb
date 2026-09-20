@@ -1,5 +1,5 @@
 /* =========================================================================
-   LOADER.JS  —  AESTHERA  ("Gravity Loader")
+   LOADER.JS  —  Elio  ("Gravity Loader")
    ملف مستقل بالكامل (CSS + HTML + JS في ملف واحد) زي animations.js.
    - بيظهر في أول زيارة بس (لكل جلسة/تاب). بعد كده مبيعملش أي حاجة.
    - مبيغيّرش أي حاجة في الكود الأساسي (HTML / style.css / app.js ...).
@@ -17,8 +17,8 @@
      --------------------------------------------------------------------- */
   var CFG = {
     storage: "session",          // "session" = مرة لكل تاب/جلسة  |  "local" = مرة واحدة بس في عمر الزائر
-    key: "aesthera_loader_seen",
-    brand: "AESTHERA",
+    key: "elio_loader_seen",
+    brand: "Elio",
     minTime: 1200,               // أقل مدة يفضل فيها اللودر (ms)
     maxTime: 8000,               // حد أمان: يخلص حتى لو في حاجة اتعلقت (ms)
     phases: [[0, "Preparing the catalog"], [35, "Setting up your space"], [75, "Almost there"], [100, "Welcome"]]
