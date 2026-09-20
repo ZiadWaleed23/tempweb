@@ -1,5 +1,5 @@
 /* =========================================================================
-   AESTHERA — RESPONSIVE OVERRIDES
+  Elio— RESPONSIVE OVERRIDES
    Large desktop is the default in style.css. This file scales the design
    down intentionally at each breakpoint rather than simply shrinking it.
    ========================================================================= */
@@ -157,4 +157,17 @@
   .stats-band__item { padding: 34px 10px; }
   .stats-band__number { font-size: 2.1rem; }
   .stats-band__label { font-size: 0.68rem; letter-spacing: 0.1em; }
+}
+/* ---------------------------------------------------------------------
+   Cart rows on small phones (prices + quantity stepper)
+   --------------------------------------------------------------------- */
+@media (max-width: 560px) {
+  .cart-item { flex-wrap: wrap; }
+  .cart-item__body { flex: 1 1 0; min-width: 0; }
+  .cart-item__total {
+    flex-basis: 100%;
+    min-width: 0;
+    padding-top: 10px;
+    border-top: 1px dashed var(--taupe-line);
+  }
 }
