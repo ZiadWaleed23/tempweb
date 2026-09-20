@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AESTHERA — Add Product Tool</title>
+<title>Elio — Add Product Tool</title>
 <style>
   :root {
     --ivory: #F7F1EC; --white:#fff; --charcoal:#201316; --charcoal-soft:#402A30;
@@ -97,6 +97,10 @@
       <div class="field full">
         <label>Tags (comma-separated)</label>
         <input type="text" id="f-tags" placeholder="lip, hyaluronic acid, filler">
+      </div>
+      <div class="field">
+        <label>Price (number only, 0 = price on request)</label>
+        <input type="number" id="f-price" min="0" step="any" placeholder="e.g. 2500">
       </div>
       <div class="field">
         <label>Date Added</label>
@@ -194,6 +198,7 @@
     brand: "${esc(brandValue)}",
     category: "${esc(categorySelect.value)}",
     subcategory: "${esc(document.getElementById("f-subcategory").value)}",
+    price: ${Math.max(0, Number(document.getElementById("f-price").value) || 0)},
     description: "${esc(document.getElementById("f-description").value)}",
     image: "${esc(image)}",${galleryLine}
     featured: ${document.getElementById("f-featured").checked},

@@ -61,6 +61,7 @@
   tbody tr:hover { background: #FCF8F4; }
   .cell-thumb img { width: 40px; height: 48px; object-fit: cover; border-radius: 4px; background: var(--ivory); display:block; }
   .cell-name { font-weight: 600; }
+  .cell-price { white-space: nowrap; font-variant-numeric: tabular-nums; }
   .cell-flags span { display: inline-block; font-size: 0.68rem; font-weight: 700; padding: 2px 7px; border-radius: 3px; margin-right: 4px; }
   .flag-featured { background: #EADFF6; color: #5B3B94; }
   .flag-bestseller { background: #F7E3C6; color: #8A5A10; }
@@ -136,6 +137,7 @@
           <th>Name</th>
           <th class="cell-brand">Brand</th>
           <th class="cell-category">Category</th>
+          <th>Price (EGP)</th>
           <th>Flags</th>
           <th>Actions</th>
         </tr>
@@ -174,6 +176,11 @@
       <div class="field">
         <label>Date Added</label>
         <input type="date" id="f-date">
+      </div>
+      <div class="field">
+        <label>Price (EGP)</label>
+        <input type="number" id="f-price" min="0" step="any" inputmode="decimal" placeholder="e.g. 2500">
+        <p class="hint">Numbers only — the site formats it as “2,500 EGP”.</p>
       </div>
       <div class="field full">
         <label>Description</label>
@@ -257,7 +264,7 @@
     $("#status-line").innerHTML = `<strong>${items.length}</strong> product${items.length === 1 ? "" : "s"} staged &nbsp;·&nbsp; showing <strong>${list.length}</strong> &nbsp;·&nbsp; nothing is live until you download and re-upload products.js`;
 
     if (!list.length) {
-      tbody.innerHTML = `<tr class="empty-row"><td colspan="6">No products match.</td></tr>`;
+      tbody.innerHTML = `<tr class="empty-row"><td colspan="7">No products match.</td></tr>`;
       return;
     }
 
@@ -271,6 +278,7 @@
           <td class="cell-name">${p.name}</td>
           <td class="cell-brand">${getBrandName(p.brand)}</td>
           <td class="cell-category">${cat ? cat.name : p.category}</td>
+          <td class="cell-price">${Number.isFinite(Number(p.price)) ? Number(p.price).toLocaleString("en-US") + " EGP" : "<em>missing</em>"}</td>
           <td class="cell-flags">${flags}</td>
           <td class="cell-actions">
             <button class="btn btn--ghost btn--small" data-edit="${p.id}">Edit</button>
@@ -309,6 +317,7 @@
     $("#f-gallery").value = product && product.gallery ? product.gallery.join("\n") : "";
     $("#f-tags").value = product && product.tags ? product.tags.join(", ") : "";
     $("#f-date").value = product ? product.dateAdded : new Date().toISOString().slice(0, 10);
+    $("#f-price").value = product && Number.isFinite(Number(product.price)) ? product.price : "";
     $("#f-featured").checked = product ? !!product.featured : false;
     $("#f-bestseller").checked = product ? !!product.bestseller : false;
 
@@ -328,6 +337,10 @@
     if (!name) { $("#form-error").textContent = "Product name is required."; return; }
     if (!id) { $("#form-error").textContent = "ID is required."; return; }
 
+    const priceRaw = $("#f-price").value.trim();
+    const price = Number(priceRaw);
+    if (!priceRaw || !Number.isFinite(price) || price <= 0) { $("#form-error").textContent = "Price is required — enter a number greater than 0 (in EGP)."; return; }
+
     const collision = items.find(p => p.id === id && p.id !== editingOriginalId);
     if (collision) { $("#form-error").textContent = `ID "${id}" is already used by "${collision.name}". Choose a different ID.`; return; }
 
@@ -339,6 +352,7 @@
       brand: brandSelect.value,
       category: categorySelect.value,
       subcategory: $("#f-subcategory").value.trim(),
+      price,
       description: $("#f-description").value.trim(),
       image: $("#f-image").value.trim(),
       ...(gallery.length ? { gallery } : {}),
@@ -384,7 +398,7 @@
     name: "${esc(p.name)}",
     brand: "${esc(p.brand)}",
     category: "${esc(p.category)}",
-    subcategory: "${esc(p.subcategory)}",
+    subcategory: "${esc(p.subcategory)}",${Number.isFinite(Number(p.price)) ? `\n    price: ${Number(p.price)},` : ""}
     description: "${esc(p.description)}",
     image: "${esc(p.image)}",${galleryLine}
     featured: ${!!p.featured},
