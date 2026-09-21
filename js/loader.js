@@ -1,6 +1,8 @@
 /* =========================================================================
-   LOADER.JS  —  Elio  ("Gravity Loader")
+   LOADER.JS  —  Elio  ("Syringe Loader")
    ملف مستقل بالكامل (CSS + HTML + JS في ملف واحد) زي animations.js.
+   - حقنة بتتملي بسائل شفاف (زي الفيلر) والمكبس بيطلع مع نسبة التحميل.
+     في الآخر نقطة بتنزل من طرف الإبرة وبعدها الصفحة بتظهر.
    - بيظهر في أول زيارة بس (لكل جلسة/تاب). بعد كده مبيعملش أي حاجة.
    - مبيغيّرش أي حاجة في الكود الأساسي (HTML / style.css / app.js ...).
    - لازم يتحط في <head> قبل ملفات الـ CSS عشان يغطي الصفحة من أول لحظة:
@@ -19,7 +21,7 @@
     storage: "session",          // "session" = مرة لكل تاب/جلسة  |  "local" = مرة واحدة بس في عمر الزائر
     key: "elio_loader_seen",
     brand: "Elio",
-    minTime: 1200,               // أقل مدة يفضل فيها اللودر (ms)
+    minTime: 2000,               // أقل مدة يفضل فيها اللودر (ms) — كفاية عشان الحقنة تتملي بشكل واضح
     maxTime: 8000,               // حد أمان: يخلص حتى لو في حاجة اتعلقت (ms)
     phases: [[0, "Preparing the catalog"], [35, "Setting up your space"], [75, "Almost there"], [100, "Welcome"]]
   };
@@ -39,69 +41,104 @@
   /* ---------------------------------------------------------------------
      3) الـ CSS
      --------------------------------------------------------------------- */
-  var css = "\
-#ld{position:fixed;inset:0;z-index:99999;display:flex;flex-direction:column;align-items:center;justify-content:center;\
-gap:clamp(10px,2.4vmin,22px);color:#FCF6FB;font-family:'Plus Jakarta Sans','Helvetica Neue','Segoe UI',system-ui,-apple-system,sans-serif;\
-background:radial-gradient(90% 80% at 50% 42%,#4D3D66 0%,#3A2A4D 55%,#2A1C3A 100%);\
--webkit-user-select:none;user-select:none;overscroll-behavior:contain}\
-#ld.revealing{-webkit-mask-image:radial-gradient(circle at 50% 50%,transparent var(--hole,0px),#000 calc(var(--hole,0px) + 2px));\
-mask-image:radial-gradient(circle at 50% 50%,transparent var(--hole,0px),#000 calc(var(--hole,0px) + 2px))}\
-#ld *{box-sizing:border-box}\
-#ld .ld-stage{position:relative;z-index:1;width:min(54vmin,340px);aspect-ratio:1}\
-#ld .ld-svg{width:100%;height:100%;overflow:visible;display:block}\
-#ld .ld-count{position:relative;z-index:1;display:flex;align-items:flex-start;justify-content:center;\
-font-family:'Helvetica Neue','Segoe UI',system-ui,-apple-system,Arial,sans-serif;\
-font-size:clamp(46px,10.5vmin,92px);line-height:1;font-weight:200;letter-spacing:-.03em;font-variant-numeric:tabular-nums}\
-#ld .ld-col{position:relative;display:inline-block;width:.6em;height:1em;overflow:hidden;text-align:center}\
-#ld .ld-col.h{width:0;opacity:0;transition:width .45s cubic-bezier(.2,.9,.2,1),opacity .45s}\
-#ld .ld-col.h.on{width:.6em;opacity:1}\
-#ld .ld-col .d{position:absolute;inset:0;line-height:1}\
-#ld .ld-col .in{animation:ld-in .38s cubic-bezier(.2,.9,.2,1) both}\
-#ld .ld-col .out{animation:ld-out .3s ease-in both}\
-@keyframes ld-in{from{transform:translateY(70%);opacity:0;filter:blur(5px)}}\
-@keyframes ld-out{to{transform:translateY(-70%);opacity:0;filter:blur(5px)}}\
-#ld .ld-pct{align-self:flex-start;margin:.14em 0 0 .12em;font-size:.3em;font-weight:400;opacity:.6;letter-spacing:0}\
-#ld .ld-status{position:relative;z-index:1;height:1.4em;font-size:clamp(13px,2.2vmin,16px);opacity:.75}\
-#ld .ld-status.sw{animation:ld-swap .5s cubic-bezier(.2,.9,.2,1)}\
-@keyframes ld-swap{from{opacity:0;transform:translateY(6px)}}\
-#ld .ld-brand{position:absolute;left:0;right:0;bottom:max(28px,env(safe-area-inset-bottom));text-align:center;\
-font-family:'Fraunces',Georgia,serif;font-size:1.25rem;font-weight:480;letter-spacing:.02em;opacity:.85}\
-#ld-shock{position:fixed;left:50%;top:50%;z-index:100000;width:0;height:0;opacity:0;border-radius:50%;box-sizing:border-box;\
-pointer-events:none;transform:translate(-50%,-50%);border:2px solid rgba(252,246,251,.9);\
-box-shadow:0 0 28px 3px #FFAFCC,0 0 90px 10px #CDB4DB,inset 0 0 30px 2px #A2D2FF}";
+  var css = [
+    "#ld{position:fixed;inset:0;z-index:99999;display:flex;flex-direction:column;align-items:center;justify-content:center;",
+    "gap:clamp(10px,2.4vmin,22px);color:#FCF6FB;font-family:'Plus Jakarta Sans','Helvetica Neue','Segoe UI',system-ui,-apple-system,sans-serif;",
+    "background:radial-gradient(90% 80% at 50% 42%,#4D3D66 0%,#3A2A4D 55%,#2A1C3A 100%);",
+    "-webkit-user-select:none;user-select:none;overscroll-behavior:contain}",
+    "#ld.revealing{-webkit-mask-image:radial-gradient(circle at 50% 50%,transparent var(--hole,0px),#000 calc(var(--hole,0px) + 2px));",
+    "mask-image:radial-gradient(circle at 50% 50%,transparent var(--hole,0px),#000 calc(var(--hole,0px) + 2px))}",
+    "#ld *{box-sizing:border-box}",
+    "#ld .ld-stage{position:relative;z-index:1;width:min(68vmin,400px);aspect-ratio:1}",
+    "#ld .ld-svg{width:100%;height:100%;overflow:visible;display:block}",
+    "#ld .ld-count{position:relative;z-index:1;display:flex;align-items:flex-start;justify-content:center;",
+    "font-family:'Helvetica Neue','Segoe UI',system-ui,-apple-system,Arial,sans-serif;",
+    "font-size:clamp(46px,10.5vmin,92px);line-height:1;font-weight:200;letter-spacing:-.03em;font-variant-numeric:tabular-nums}",
+    "#ld .ld-col{position:relative;display:inline-block;width:.6em;height:1em;overflow:hidden;text-align:center}",
+    "#ld .ld-col.h{width:0;opacity:0;transition:width .45s cubic-bezier(.2,.9,.2,1),opacity .45s}",
+    "#ld .ld-col.h.on{width:.6em;opacity:1}",
+    "#ld .ld-col .d{position:absolute;inset:0;line-height:1}",
+    "#ld .ld-col .in{animation:ld-in .38s cubic-bezier(.2,.9,.2,1) both}",
+    "#ld .ld-col .out{animation:ld-out .3s ease-in both}",
+    "@keyframes ld-in{from{transform:translateY(70%);opacity:0;filter:blur(5px)}}",
+    "@keyframes ld-out{to{transform:translateY(-70%);opacity:0;filter:blur(5px)}}",
+    "#ld .ld-pct{align-self:flex-start;margin:.14em 0 0 .12em;font-size:.3em;font-weight:400;opacity:.6;letter-spacing:0}",
+    "#ld .ld-status{position:relative;z-index:1;height:1.4em;font-size:clamp(13px,2.2vmin,16px);opacity:.75}",
+    "#ld .ld-status.sw{animation:ld-swap .5s cubic-bezier(.2,.9,.2,1)}",
+    "@keyframes ld-swap{from{opacity:0;transform:translateY(6px)}}",
+    "#ld .ld-brand{position:absolute;left:0;right:0;bottom:max(28px,env(safe-area-inset-bottom));text-align:center;",
+    "font-family:'Fraunces',Georgia,serif;font-size:1.25rem;font-weight:480;letter-spacing:.02em;opacity:.85}",
+    "#ld-shock{position:fixed;left:50%;top:50%;z-index:100000;width:0;height:0;opacity:0;border-radius:50%;box-sizing:border-box;",
+    "pointer-events:none;transform:translate(-50%,-50%);border:2px solid rgba(252,246,251,.9);",
+    "box-shadow:0 0 28px 3px #FFAFCC,0 0 90px 10px #CDB4DB,inset 0 0 30px 2px #A2D2FF}"
+  ].join("");
 
   /* ---------------------------------------------------------------------
-     4) الـ HTML
+     4) الـ HTML  (الحقنة مرسومة أفقي جوه الـ SVG وبتتلف -45° بالكود)
+        محور الحقنة = المحور X:  الإبرة عند x سالب، المكبس عند x موجب.
      --------------------------------------------------------------------- */
-  var html = '\
-<div class="ld-stage">\
-<svg class="ld-svg" viewBox="-100 -100 200 200" aria-hidden="true">\
-<defs>\
-<linearGradient id="ld-grad" gradientUnits="userSpaceOnUse" x1="-100" y1="-100" x2="100" y2="100">\
-<stop offset="0" stop-color="#A2D2FF"/><stop offset=".55" stop-color="#CDB4DB"/><stop offset="1" stop-color="#FFAFCC"/>\
-</linearGradient>\
-<filter id="ld-goo" filterUnits="userSpaceOnUse" x="-100" y="-100" width="200" height="200" color-interpolation-filters="sRGB">\
-<feGaussianBlur in="SourceGraphic" stdDeviation="4.2" result="b"/>\
-<feColorMatrix in="b" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 24 -10"/>\
-</filter>\
-<filter id="ld-glow" filterUnits="userSpaceOnUse" x="-100" y="-100" width="200" height="200"><feGaussianBlur stdDeviation="9"/></filter>\
-<g id="ld-blobs" filter="url(#ld-goo)" fill="url(#ld-grad)">\
-<circle id="ld-core" r="5"/>\
-<circle class="ld-orb" r="8"/><circle class="ld-orb" r="8"/><circle class="ld-orb" r="8"/><circle class="ld-orb" r="8"/><circle class="ld-orb" r="8"/>\
-</g>\
-</defs>\
-<g id="ld-ring">\
-<circle r="99" fill="none" stroke="#FCF6FB" stroke-opacity=".35" stroke-width="1.4" stroke-dasharray="1.2 6.4">\
-<animateTransform attributeName="transform" type="rotate" from="0" to="360" dur="40s" repeatCount="indefinite"/></circle>\
-<circle r="92" fill="none" stroke="#FCF6FB" stroke-opacity=".16" stroke-width="1.5"/>\
-<circle id="ld-arc" r="92" fill="none" stroke="url(#ld-grad)" stroke-width="2.6" stroke-linecap="round" stroke-dasharray="578.053" stroke-dashoffset="578.053" transform="rotate(-90)"/>\
-<circle id="ld-halo" r="6.5" fill="#FCF6FB" opacity=".2"/><circle id="ld-head" r="3" fill="#FCF6FB"/>\
-</g>\
-<use href="#ld-blobs" filter="url(#ld-glow)" opacity=".55"/><use href="#ld-blobs"/>\
-</svg></div>\
-<div class="ld-count" aria-hidden="true"><span class="ld-col h" data-c="h"></span><span class="ld-col" data-c="t"></span><span class="ld-col" data-c="o"></span><span class="ld-pct">%</span></div>\
-<div class="ld-status" aria-hidden="true"></div>\
-<div class="ld-brand"></div>';
+  var ticks = "";
+  for (var t = -40; t <= 40; t += 10) {
+    var long = (t % 20 === 0);
+    ticks += '<line x1="' + t + '" y1="16" x2="' + t + '" y2="' + (long ? 8.5 : 12) + '"/>';
+  }
+  var bubbles = "";
+  for (var b = 0; b < 8; b++) bubbles += '<circle class="ld-bub" r="1.4"/>';
+
+  var html = [
+    '<div class="ld-stage">',
+    '<svg class="ld-svg" viewBox="-125 -125 250 250" aria-hidden="true">',
+    '<defs>',
+    '<radialGradient id="ld-aura-g" cx="50%" cy="50%" r="50%">',
+    '<stop offset="0" stop-color="#A2D2FF" stop-opacity=".30"/><stop offset=".6" stop-color="#CDB4DB" stop-opacity=".10"/><stop offset="1" stop-color="#CDB4DB" stop-opacity="0"/>',
+    '</radialGradient>',
+    /* السائل الشفاف: تقريبًا زجاج — بس بياخد لمعة من الحواف وتدرّج خفيف */
+    '<linearGradient id="ld-liq" x1="0" y1="0" x2="0" y2="1">',
+    '<stop offset="0" stop-color="#FFFFFF" stop-opacity=".62"/><stop offset=".22" stop-color="#D9EEFF" stop-opacity=".34"/>',
+    '<stop offset=".55" stop-color="#BDE0FE" stop-opacity=".24"/><stop offset=".85" stop-color="#E6D6F0" stop-opacity=".34"/>',
+    '<stop offset="1" stop-color="#FFFFFF" stop-opacity=".55"/>',
+    '</linearGradient>',
+    '<linearGradient id="ld-stop" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FFC8DD"/><stop offset="1" stop-color="#E88DB3"/></linearGradient>',
+    '<clipPath id="ld-clip"><path d="M50 -14.6 H-50 L-63 -2.6 V2.6 L-50 14.6 H50 Z"/></clipPath>',
+    '</defs>',
+    '<circle id="ld-aura" r="120" fill="url(#ld-aura-g)" opacity="0"/>',
+    '<g id="ld-syr">',
+    /* الإبرة + الـ hub */
+    '<path d="M-72 -1.3 L-114 -1.3 L-124 1.3 L-72 1.3 Z" fill="#FCF6FB" fill-opacity=".95"/>',
+    '<rect x="-72" y="-5.2" width="8" height="10.4" rx="1.6" fill="#A2D2FF"/>',
+    /* زجاج الأسطوانة */
+    '<path d="M50 -16 H-50 L-64 -3.6 V3.6 L-50 16 H50" fill="#FFFFFF" fill-opacity=".05"/>',
+    /* السائل (بيتقصّ على شكل الأسطوانة) + الفقاقيع */
+    '<g clip-path="url(#ld-clip)">',
+    '<rect id="ld-liquid" x="-65" y="-16" width="0" height="32" fill="url(#ld-liq)"/>',
+    '<line id="ld-face" x1="0" y1="-15" x2="0" y2="15" stroke="#FFFFFF" stroke-opacity=".7" stroke-width="1.2" opacity="0"/>',
+    '<g id="ld-bubs" fill="#FFFFFF" fill-opacity=".12" stroke="#FFFFFF" stroke-opacity=".7" stroke-width=".6">' + bubbles + '</g>',
+    '</g>',
+    /* جناح الأسطوانة */
+    '<rect x="50" y="-28" width="5" height="56" rx="2.5" fill="#FCF6FB" fill-opacity=".92"/>',
+    /* المكبس: بيتحرك كله مع بعض (transform) */
+    '<g id="ld-plg">',
+    '<rect x="10" y="-3.2" width="104" height="6.4" rx="1.2" fill="#FCF6FB" fill-opacity=".9"/>',
+    '<line x1="10" y1="0" x2="114" y2="0" stroke="#3A2A4D" stroke-opacity=".28" stroke-width=".8"/>',
+    '<rect x="114" y="-22" width="6" height="44" rx="3" fill="#FCF6FB"/>',
+    '<rect x="0" y="-14.6" width="10" height="29.2" rx="2.4" fill="url(#ld-stop)"/>',
+    '<line x1="3.4" y1="-14" x2="3.4" y2="14" stroke="#3A2A4D" stroke-opacity=".35" stroke-width=".9"/>',
+    '<line x1="6.6" y1="-14" x2="6.6" y2="14" stroke="#3A2A4D" stroke-opacity=".35" stroke-width=".9"/>',
+    '</g>',
+    /* إطار الزجاج + اللمعات + التدريج فوق كل حاجة */
+    '<path d="M50 -16 H-50 L-64 -3.6 V3.6 L-50 16 H50" fill="none" stroke="#FCF6FB" stroke-opacity=".62" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"/>',
+    '<line x1="-44" y1="-11.6" x2="44" y2="-11.6" stroke="#FFFFFF" stroke-opacity=".5" stroke-width="2.2" stroke-linecap="round"/>',
+    '<line x1="-30" y1="-8" x2="16" y2="-8" stroke="#FFFFFF" stroke-opacity=".22" stroke-width="1.1" stroke-linecap="round"/>',
+    '<line x1="-44" y1="11.4" x2="30" y2="11.4" stroke="#FFFFFF" stroke-opacity=".16" stroke-width="1.2" stroke-linecap="round"/>',
+    '<g stroke="#FCF6FB" stroke-opacity=".55" stroke-width=".9" stroke-linecap="round">' + ticks + '</g>',
+    '</g>',
+    /* النقطة اللي بتنزل من الإبرة في الآخر */
+    '<ellipse id="ld-drop" rx="0" ry="0" fill="#DEF0FF" fill-opacity=".55" stroke="#FFFFFF" stroke-opacity=".85" stroke-width=".8" opacity="0"/>',
+    '</svg></div>',
+    '<div class="ld-count" aria-hidden="true"><span class="ld-col h" data-c="h"></span><span class="ld-col" data-c="t"></span><span class="ld-col" data-c="o"></span><span class="ld-pct">%</span></div>',
+    '<div class="ld-status" aria-hidden="true"></div>',
+    '<div class="ld-brand"></div>'
+  ].join("");
 
   var styleEl = document.createElement("style");
   styleEl.id = "ld-style";
@@ -132,15 +169,20 @@ box-shadow:0 0 28px 3px #FFAFCC,0 0 90px 10px #CDB4DB,inset 0 0 30px 2px #A2D2FF
   var easeOut = function (t) { return 1 - Math.pow(1 - t, 3); };
   var easeInOut = function (t) { return t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2; };
 
-  var arc = $("#ld-arc"), ring = $("#ld-ring"), head = $("#ld-head"), halo = $("#ld-halo");
-  var grad = $("#ld-grad"), core = $("#ld-core");
+  var syr = $("#ld-syr"), plg = $("#ld-plg"), liquid = $("#ld-liquid"), face = $("#ld-face"), aura = $("#ld-aura"), drop = $("#ld-drop");
   var countBox = $(".ld-count"), statusEl = $(".ld-status");
   var colH = $('[data-c="h"]'), colT = $('[data-c="t"]'), colO = $('[data-c="o"]');
-  var CIRC = 2 * Math.PI * 92;
 
-  // كل كورة ليها مسار Lissajous خاص بيها، فبتتقاطع وتلزق في بعض
-  var orbs = Array.prototype.map.call(el.querySelectorAll(".ld-orb"), function (o, i) {
-    return { el: o, fx: 1 + i * .23, fy: 1.3 + i * .31, ph: i * 1.9, R: 46 + (i % 3) * 14, r: 7 + (i % 2) * 3.2, dir: i % 2 ? -1 : 1 };
+  /* أبعاد الحقنة (بوحدات الـ SVG) */
+  var TIP_X = -124;            // طرف الإبرة
+  var LIQ_X0 = -64;            // بداية السائل (عند الـ hub)
+  var SX0 = -48, SX1 = 38;     // مكان وش المكبس: فاضية -> مليانة
+  var PAD_END0 = 72, PAD_END1 = 158;   // طرف المقبض في الحالتين (بنستخدمهم عشان نوسّط الرسمة)
+  var C0 = (TIP_X + PAD_END0) / 2, C1 = (TIP_X + PAD_END1) / 2;
+  var COS45 = Math.SQRT1_2;
+
+  var bubs = Array.prototype.map.call(el.querySelectorAll(".ld-bub"), function (c, i) {
+    return { el: c, speed: .26 + (i % 4) * .07, ph: i / 8, wob: 1.6 + i * .9, r: 1 + (i % 3) * .55 };
   });
 
   /* عداد الأرقام: خانة الآحاد بتتغيّر بسرعة فبنبدّلها فورًا، والعشرات/المئات بتلف بحركة */
@@ -189,7 +231,7 @@ box-shadow:0 0 28px 3px #FFAFCC,0 0 90px 10px #CDB4DB,inset 0 0 30px 2px #A2D2FF
 
   var raf = 0, start = performance.now(), last = start, T = 0;
   var phase = "load", phaseStart = 0, shown = 0, lastV = -1, lastPhase = -1, maxR = 0;
-  var MERGE_MS = 750, REVEAL_MS = 1000;
+  var DOSE_MS = 800, REVEAL_MS = 1000;
 
   function complete() {
     cancelAnimationFrame(raf);
@@ -228,42 +270,69 @@ box-shadow:0 0 28px 3px #FFAFCC,0 0 90px 10px #CDB4DB,inset 0 0 30px 2px #A2D2FF
       if (!loaded) real = Math.min(.92, Math.max(real, elapsed / CFG.maxTime * .9));   // زحف بطيء عشان مايبانش متجمّد
       var target = Math.min(real, clamp(elapsed / CFG.minTime));
       shown += (target - shown) * (1 - Math.exp(-dt * 5));
-      if (target >= 1 && shown > .996) { shown = 1; phase = "merge"; phaseStart = now; }
+      if (target >= 1 && shown > .996) { shown = 1; phase = "dose"; phaseStart = now; }
     }
 
-    var merge = 0, swell = 0;
-    if (phase === "merge") {
-      var k1 = clamp((now - phaseStart) / MERGE_MS);
-      merge = easeInOut(k1);
-      if (k1 >= 1) { phase = "reveal"; phaseStart = now; startReveal(); }
+    var dose = 0;      // 0..1 خلال مرحلة النقطة
+    if (phase === "dose") {
+      dose = clamp((now - phaseStart) / DOSE_MS);
+      if (dose >= 1) { phase = "reveal"; phaseStart = now; startReveal(); }
     } else if (phase === "reveal") {
       var k2 = clamp((now - phaseStart) / REVEAL_MS);
-      merge = 1; swell = easeOut(clamp(k2 / .3));
+      dose = 1;
       doReveal(k2);
       if (k2 >= 1) { complete(); return; }
     }
 
-    /* الكور */
     var p = shown;
-    core.setAttribute("r", (lerp(5, 17, easeOut(p)) + Math.sin(T * 3) * .7 + merge * 9 + swell * 34).toFixed(2));
-    var tight = 1 - .5 * easeOut(p);
-    for (var i = 0; i < orbs.length; i++) {
-      var o = orbs[i];
-      var a = T * o.dir * o.fx * .9 + o.ph, b = T * o.fy * .9 + o.ph * 1.3;
-      var R = o.R * tight * (1 - merge);
-      o.el.setAttribute("cx", (Math.cos(a) * R).toFixed(2));
-      o.el.setAttribute("cy", (Math.sin(b) * R).toFixed(2));
-      o.el.setAttribute("r", (o.r * (1 - .35 * merge) * (.9 + .1 * Math.sin(T * 2 + o.ph))).toFixed(2));
-    }
-    grad.setAttribute("gradientTransform", "rotate(" + ((T * 40) % 360).toFixed(1) + ")");
 
-    /* الحلقة */
-    arc.setAttribute("stroke-dashoffset", (CIRC * (1 - p)).toFixed(2));
-    var ang = -Math.PI / 2 + p * Math.PI * 2;
-    var hx = (Math.cos(ang) * 92).toFixed(2), hy = (Math.sin(ang) * 92).toFixed(2);
-    head.setAttribute("cx", hx); head.setAttribute("cy", hy);
-    halo.setAttribute("cx", hx); halo.setAttribute("cy", hy);
-    ring.style.opacity = (1 - clamp(merge * 1.2)).toFixed(3);
+    /* الحقنة: بتتوسّط وبتتلف -45° (الإبرة تحت الشمال، المكبس فوق اليمين) */
+    var c = lerp(C0, C1, p);
+    syr.setAttribute("transform", "rotate(-45) translate(" + (-c).toFixed(2) + " 0)");
+
+    /* المكبس بيتسحب مع النسبة، وفي الآخر بيدفع شوية عشان تنزل النقطة */
+    var push = easeInOut(clamp(dose / .5)) * 8;
+    var sx = lerp(SX0, SX1, p) - push;
+    plg.setAttribute("transform", "translate(" + sx.toFixed(2) + " 0)");
+
+    /* السائل: يدخل من الإبرة أول 10% وبعدها يمشي ورا المكبس */
+    var front = lerp(LIQ_X0, sx, easeOut(clamp(p / .1)));
+    liquid.setAttribute("width", Math.max(0, front - (-65)).toFixed(2));
+    face.setAttribute("x1", front.toFixed(2)); face.setAttribute("x2", front.toFixed(2));
+    face.setAttribute("opacity", clamp((front - LIQ_X0) / 6).toFixed(2));
+
+    /* الفقاقيع: بتدخل من طرف الإبرة وتمشي مع السحب لحد المكبس */
+    for (var i = 0; i < bubs.length; i++) {
+      var o = bubs[i];
+      var u = (T * o.speed + o.ph) % 1;
+      var bx = lerp(LIQ_X0 - 2, front - 3, u);
+      var amp = 2 + 8 * clamp((bx - LIQ_X0) / 14);
+      o.el.setAttribute("cx", bx.toFixed(2));
+      o.el.setAttribute("cy", (Math.sin(T * 1.7 + i * 1.9) * amp * .8).toFixed(2));
+      o.el.setAttribute("r", o.r.toFixed(2));
+      o.el.style.opacity = (Math.pow(Math.sin(Math.PI * u), .8) * clamp((front - LIQ_X0) / 12)).toFixed(3);
+    }
+
+    /* الهالة + اختفاء الحقنة أثناء النقطة */
+    var vanish = clamp((dose - .55) / .45);
+    aura.setAttribute("opacity", ((.35 + .65 * p) * (1 - vanish)).toFixed(3));
+    syr.style.opacity = (1 - vanish).toFixed(3);
+
+    /* النقطة: بتتكوّن على طرف الإبرة وبعدين تنزل لتحت */
+    if (dose > 0 && dose < 1) {
+      var lx = TIP_X - c;                              // طرف الإبرة بعد الإزاحة (محلي)
+      var tx = lx * COS45, ty = -lx * COS45;           // بعد تدوير -45°
+      var f = easeOut(clamp(dose / .4));
+      var g = clamp((dose - .4) / .6);
+      var rx = 4.4 * f, ry = rx * (1 + .9 * g);
+      drop.setAttribute("cx", tx.toFixed(2));
+      drop.setAttribute("cy", (ty + ry * .9 + 58 * g * g).toFixed(2));
+      drop.setAttribute("rx", rx.toFixed(2));
+      drop.setAttribute("ry", ry.toFixed(2));
+      drop.setAttribute("opacity", (1 - g * g).toFixed(3));
+    } else {
+      drop.setAttribute("opacity", "0");
+    }
 
     /* العداد + الحالة */
     var v = Math.round(p * 100);
@@ -275,7 +344,7 @@ box-shadow:0 0 28px 3px #FFAFCC,0 0 90px 10px #CDB4DB,inset 0 0 30px 2px #A2D2FF
       statusEl.textContent = CFG.phases[idx][1];
       statusEl.classList.remove("sw"); void statusEl.offsetWidth; statusEl.classList.add("sw");
     }
-    var fade = (1 - clamp((merge - .3) / .7)).toFixed(3);
+    var fade = (1 - clamp((dose - .3) / .7)).toFixed(3);
     countBox.style.opacity = fade;
     statusEl.style.opacity = (fade * .75).toFixed(3);
   }
