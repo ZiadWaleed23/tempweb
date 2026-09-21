@@ -80,10 +80,10 @@
   var ticks = "";
   for (var t = -40; t <= 40; t += 10) {
     var long = (t % 20 === 0);
-    ticks += '<line x1="' + t + '" y1="16" x2="' + t + '" y2="' + (long ? 8.5 : 12) + '"/>';
+    ticks += '<line x1="' + t + '" y1="7" x2="' + t + '" y2="' + (long ? 3.4 : 5.2) + '"/>';
   }
   var bubbles = "";
-  for (var b = 0; b < 8; b++) bubbles += '<circle class="ld-bub" r="1.4"/>';
+  for (var b = 0; b < 8; b++) bubbles += '<circle class="ld-bub" r="0.9"/>';
 
   var html = [
     '<div class="ld-stage">',
@@ -99,38 +99,38 @@
     '<stop offset="1" stop-color="#FFFFFF" stop-opacity=".55"/>',
     '</linearGradient>',
     '<linearGradient id="ld-stop" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FFC8DD"/><stop offset="1" stop-color="#E88DB3"/></linearGradient>',
-    '<clipPath id="ld-clip"><path d="M50 -14.6 H-50 L-63 -2.6 V2.6 L-50 14.6 H50 Z"/></clipPath>',
+    '<clipPath id="ld-clip"><path d="M50 -6.2 H-52 L-63 -1.5 V1.5 L-52 6.2 H50 Z"/></clipPath>',
     '</defs>',
     '<circle id="ld-aura" r="120" fill="url(#ld-aura-g)" opacity="0"/>',
     '<g id="ld-syr">',
     /* الإبرة + الـ hub */
-    '<path d="M-72 -1.3 L-114 -1.3 L-124 1.3 L-72 1.3 Z" fill="#FCF6FB" fill-opacity=".95"/>',
-    '<rect x="-72" y="-5.2" width="8" height="10.4" rx="1.6" fill="#A2D2FF"/>',
+    '<path d="M-72 -0.75 L-114 -0.75 L-124 0.75 L-72 0.75 Z" fill="#FCF6FB" fill-opacity=".95"/>',
+    '<rect x="-72" y="-3" width="8" height="6" rx="1.2" fill="#A2D2FF"/>',
     /* زجاج الأسطوانة */
-    '<path d="M50 -16 H-50 L-64 -3.6 V3.6 L-50 16 H50" fill="#FFFFFF" fill-opacity=".05"/>',
+    '<path d="M50 -7 H-52 L-64 -1.8 V1.8 L-52 7 H50" fill="#FFFFFF" fill-opacity=".05"/>',
     /* السائل (بيتقصّ على شكل الأسطوانة) + الفقاقيع */
     '<g clip-path="url(#ld-clip)">',
-    '<rect id="ld-liquid" x="-65" y="-16" width="0" height="32" fill="url(#ld-liq)"/>',
-    '<line id="ld-face" x1="0" y1="-15" x2="0" y2="15" stroke="#FFFFFF" stroke-opacity=".7" stroke-width="1.2" opacity="0"/>',
-    '<g id="ld-bubs" fill="#FFFFFF" fill-opacity=".12" stroke="#FFFFFF" stroke-opacity=".7" stroke-width=".6">' + bubbles + '</g>',
+    '<rect id="ld-liquid" x="-65" y="-7" width="0" height="14" fill="url(#ld-liq)"/>',
+    '<line id="ld-face" x1="0" y1="-6.2" x2="0" y2="6.2" stroke="#FFFFFF" stroke-opacity=".7" stroke-width=".9" opacity="0"/>',
+    '<g id="ld-bubs" fill="#FFFFFF" fill-opacity=".12" stroke="#FFFFFF" stroke-opacity=".7" stroke-width=".45">' + bubbles + '</g>',
     '</g>',
     /* جناح الأسطوانة */
-    '<rect x="50" y="-28" width="5" height="56" rx="2.5" fill="#FCF6FB" fill-opacity=".92"/>',
+    '<rect x="50" y="-13" width="3.6" height="26" rx="1.8" fill="#FCF6FB" fill-opacity=".92"/>',
     /* المكبس: بيتحرك كله مع بعض (transform) */
     '<g id="ld-plg">',
-    '<rect x="10" y="-3.2" width="104" height="6.4" rx="1.2" fill="#FCF6FB" fill-opacity=".9"/>',
-    '<line x1="10" y1="0" x2="114" y2="0" stroke="#3A2A4D" stroke-opacity=".28" stroke-width=".8"/>',
-    '<rect x="114" y="-22" width="6" height="44" rx="3" fill="#FCF6FB"/>',
-    '<rect x="0" y="-14.6" width="10" height="29.2" rx="2.4" fill="url(#ld-stop)"/>',
-    '<line x1="3.4" y1="-14" x2="3.4" y2="14" stroke="#3A2A4D" stroke-opacity=".35" stroke-width=".9"/>',
-    '<line x1="6.6" y1="-14" x2="6.6" y2="14" stroke="#3A2A4D" stroke-opacity=".35" stroke-width=".9"/>',
+    '<rect x="8" y="-1.5" width="107.5" height="3" rx="1" fill="#FCF6FB" fill-opacity=".9"/>',
+    '<line x1="8" y1="0" x2="115.5" y2="0" stroke="#3A2A4D" stroke-opacity=".28" stroke-width=".6"/>',
+    '<rect x="115.5" y="-11" width="4.5" height="22" rx="2.2" fill="#FCF6FB"/>',
+    '<rect x="0" y="-6.2" width="8" height="12.4" rx="1.8" fill="url(#ld-stop)"/>',
+    '<line x1="2.7" y1="-5.6" x2="2.7" y2="5.6" stroke="#3A2A4D" stroke-opacity=".35" stroke-width=".7"/>',
+    '<line x1="5.3" y1="-5.6" x2="5.3" y2="5.6" stroke="#3A2A4D" stroke-opacity=".35" stroke-width=".7"/>',
     '</g>',
     /* إطار الزجاج + اللمعات + التدريج فوق كل حاجة */
-    '<path d="M50 -16 H-50 L-64 -3.6 V3.6 L-50 16 H50" fill="none" stroke="#FCF6FB" stroke-opacity=".62" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"/>',
-    '<line x1="-44" y1="-11.6" x2="44" y2="-11.6" stroke="#FFFFFF" stroke-opacity=".5" stroke-width="2.2" stroke-linecap="round"/>',
-    '<line x1="-30" y1="-8" x2="16" y2="-8" stroke="#FFFFFF" stroke-opacity=".22" stroke-width="1.1" stroke-linecap="round"/>',
-    '<line x1="-44" y1="11.4" x2="30" y2="11.4" stroke="#FFFFFF" stroke-opacity=".16" stroke-width="1.2" stroke-linecap="round"/>',
-    '<g stroke="#FCF6FB" stroke-opacity=".55" stroke-width=".9" stroke-linecap="round">' + ticks + '</g>',
+    '<path d="M50 -7 H-52 L-64 -1.8 V1.8 L-52 7 H50" fill="none" stroke="#FCF6FB" stroke-opacity=".62" stroke-width="1.1" stroke-linejoin="round" stroke-linecap="round"/>',
+    '<line x1="-44" y1="-4.6" x2="44" y2="-4.6" stroke="#FFFFFF" stroke-opacity=".5" stroke-width="1.3" stroke-linecap="round"/>',
+    '<line x1="-30" y1="-2.6" x2="16" y2="-2.6" stroke="#FFFFFF" stroke-opacity=".22" stroke-width=".7" stroke-linecap="round"/>',
+    '<line x1="-44" y1="4.4" x2="30" y2="4.4" stroke="#FFFFFF" stroke-opacity=".16" stroke-width=".8" stroke-linecap="round"/>',
+    '<g stroke="#FCF6FB" stroke-opacity=".55" stroke-width=".6" stroke-linecap="round">' + ticks + '</g>',
     '</g>',
     /* النقطة اللي بتنزل من الإبرة في الآخر */
     '<ellipse id="ld-drop" rx="0" ry="0" fill="#DEF0FF" fill-opacity=".55" stroke="#FFFFFF" stroke-opacity=".85" stroke-width=".8" opacity="0"/>',
@@ -182,7 +182,7 @@
   var COS45 = Math.SQRT1_2;
 
   var bubs = Array.prototype.map.call(el.querySelectorAll(".ld-bub"), function (c, i) {
-    return { el: c, speed: .26 + (i % 4) * .07, ph: i / 8, wob: 1.6 + i * .9, r: 1 + (i % 3) * .55 };
+    return { el: c, speed: .26 + (i % 4) * .07, ph: i / 8, wob: 1.6 + i * .9, r: .6 + (i % 3) * .3 };
   });
 
   /* عداد الأرقام: خانة الآحاد بتتغيّر بسرعة فبنبدّلها فورًا، والعشرات/المئات بتلف بحركة */
@@ -306,7 +306,7 @@
       var o = bubs[i];
       var u = (T * o.speed + o.ph) % 1;
       var bx = lerp(LIQ_X0 - 2, front - 3, u);
-      var amp = 2 + 8 * clamp((bx - LIQ_X0) / 14);
+      var amp = 1 + 3.4 * clamp((bx - LIQ_X0) / 14);
       o.el.setAttribute("cx", bx.toFixed(2));
       o.el.setAttribute("cy", (Math.sin(T * 1.7 + i * 1.9) * amp * .8).toFixed(2));
       o.el.setAttribute("r", o.r.toFixed(2));
