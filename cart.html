@@ -69,6 +69,22 @@
       <aside class="cart-summary" id="cart-summary">
         <h3>Order Summary</h3>
 
+        <div class="shipping-progress" id="shipping-progress">
+          <p class="shipping-progress__msg" id="shipping-progress-msg" aria-live="polite"></p>
+          <div class="shipping-progress__track">
+            <div class="shipping-progress__fill" id="shipping-progress-fill"></div>
+          </div>
+        </div>
+
+        <div class="cart-line-row">
+          <span>Subtotal</span>
+          <strong id="cart-subtotal">&mdash;</strong>
+        </div>
+        <div class="cart-line-row">
+          <span>Shipping</span>
+          <strong id="cart-shipping">&mdash;</strong>
+        </div>
+
         <div class="cart-total">
           <span class="cart-total__label">Total</span>
           <strong class="cart-total__value" id="cart-total" aria-live="polite">&mdash;</strong>
@@ -88,6 +104,12 @@
             <label for="co-phone">Phone / WhatsApp <span class="field__req" aria-hidden="true">*</span></label>
             <input type="tel" id="co-phone" inputmode="tel" autocomplete="tel" placeholder="+20 1XX XXX XXXX" required aria-required="true" aria-describedby="co-phone-error" aria-invalid="false">
             <p class="field__error" id="co-phone-error" role="alert" hidden></p>
+          </div>
+
+          <div class="field">
+            <label for="co-email">Email <span class="field__req" aria-hidden="true">*</span></label>
+            <input type="email" id="co-email" inputmode="email" autocomplete="email" placeholder="you@example.com" required aria-required="true" aria-describedby="co-email-error" aria-invalid="false">
+            <p class="field__error" id="co-email-error" role="alert" hidden></p>
           </div>
 
           <div class="field">
