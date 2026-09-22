@@ -17,13 +17,19 @@ const CartPage = {
     this.listEl = $("#cart-list");
     this.countEl = $("#cart-item-count");
     this.checkoutBtn = $("#cart-checkout-btn");
+    this.subtotalEl = $("#cart-subtotal");
+    this.shippingEl = $("#cart-shipping");
     this.totalEl = $("#cart-total");
     this.totalNoteEl = $("#cart-total-note");
+    this.shippingProgressEl = $("#shipping-progress");
+    this.shippingProgressMsgEl = $("#shipping-progress-msg");
+    this.shippingProgressFillEl = $("#shipping-progress-fill");
     if (!this.listEl) return; // only run on cart.html
 
     this.fields = {
       name:    $("#co-name"),
       phone:   $("#co-phone"),
+      email:   $("#co-email"),
       address: $("#co-address"),
       notes:   $("#co-notes")
     };
@@ -59,6 +65,13 @@ const CartPage = {
       else total += price * qty;
     });
     return { total, unpriced, units };
+  },
+
+  /* Flat fee below SITE_CONFIG.shipping.freeThreshold, free at/above it. */
+  getShipping(subtotal) {
+    const cfg = SITE_CONFIG.shipping;
+    if (!cfg) return 0;
+    return subtotal >= cfg.freeThreshold ? 0 : cfg.fee;
   },
 
   /* ------------------------------------------------------------------
@@ -118,18 +131,46 @@ const CartPage = {
   updateSummary(items) {
     items = items || this.getItems();
     const { total, unpriced, units } = this.totals(items);
+    const shipping = this.getShipping(total);
+    const hasPricedTotal = total > 0 || !unpriced;
 
     if (this.countEl) {
       this.countEl.textContent = `${units} item${units === 1 ? "" : "s"} in your cart`;
     }
+    if (this.subtotalEl) {
+      this.subtotalEl.textContent = hasPricedTotal ? formatPrice(total) : formatPrice(null);
+    }
+    if (this.shippingEl) {
+      this.shippingEl.textContent = !hasPricedTotal ? "\u2014" : shipping === 0 ? "Free" : formatPrice(shipping);
+    }
     if (this.totalEl) {
-      this.totalEl.textContent = total > 0 || !unpriced ? formatPrice(total) : formatPrice(null);
+      this.totalEl.textContent = hasPricedTotal ? formatPrice(total + shipping) : formatPrice(null);
     }
     if (this.totalNoteEl) {
       this.totalNoteEl.textContent = unpriced
         ? `${unpriced} item${unpriced === 1 ? " is" : "s are"} priced on request and not included in this total.`
         : "";
       this.totalNoteEl.hidden = !unpriced;
+    }
+    this.updateShippingProgress(total);
+  },
+
+  /* Fills the "free shipping" bar and updates its message as the
+     subtotal approaches SITE_CONFIG.shipping.freeThreshold. */
+  updateShippingProgress(subtotal) {
+    const cfg = SITE_CONFIG.shipping;
+    if (!cfg || !this.shippingProgressFillEl || !this.shippingProgressMsgEl) return;
+
+    const remaining = cfg.freeThreshold - subtotal;
+    const pct = Math.max(0, Math.min(100, (subtotal / cfg.freeThreshold) * 100));
+    this.shippingProgressFillEl.style.width = `${pct}%`;
+
+    if (remaining <= 0) {
+      this.shippingProgressMsgEl.innerHTML = `You&rsquo;ve unlocked <strong>free shipping</strong>!`;
+      if (this.shippingProgressEl) this.shippingProgressEl.classList.add("shipping-progress--complete");
+    } else {
+      this.shippingProgressMsgEl.innerHTML = `Add <strong>${formatPrice(remaining)}</strong> more to get free shipping`;
+      if (this.shippingProgressEl) this.shippingProgressEl.classList.remove("shipping-progress--complete");
     }
   },
 
@@ -220,11 +261,13 @@ const CartPage = {
   validators: {
     name:    v => v.trim().length >= 2,
     phone:   v => { const d = v.replace(/\D/g, ""); return d.length >= 8 && d.length <= 15; },
+    email:   v => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim()),
     address: v => v.trim().length >= 5
   },
   messages: {
     name:    "Please enter your full name.",
     phone:   "Please enter a valid phone number (8–15 digits).",
+    email:   "Please enter a valid email address.",
     address: "Please enter your delivery address."
   },
 
@@ -273,6 +316,7 @@ const CartPage = {
   buildWhatsappLink(items) {
     const f = key => this.fields[key].value.trim();
     const { total, unpriced } = this.totals(items);
+    const shipping = this.getShipping(total);
 
     const orderLines = items.map(({ product, qty }, i) => {
       const price = getPrice(product);
@@ -283,11 +327,13 @@ const CartPage = {
     const customer = [
       `Name: ${f("name")}`,
       `Phone: ${f("phone")}`,
+      `Email: ${f("email")}`,
       `Address: ${f("address")}`,
       f("notes") ? `Notes: ${f("notes")}` : null
     ].filter(Boolean);
 
-    let totalLine = `*Total: ${formatPrice(total)}*`;
+    const shippingLine = `Shipping: ${shipping === 0 ? "Free" : formatPrice(shipping)}`;
+    let totalLine = `*Total: ${formatPrice(total + shipping)}*`;
     if (unpriced) totalLine += ` (+ ${unpriced} item${unpriced === 1 ? "" : "s"} priced on request)`;
 
     const message = [
@@ -299,6 +345,7 @@ const CartPage = {
       "*Order*",
       ...orderLines,
       "",
+      shippingLine,
       totalLine
     ].join("\n");
 

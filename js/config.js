@@ -133,5 +133,14 @@ const SITE_CONFIG = {
   catalog: {
     productsPerPage: 12,     // number of cards revealed per "Load More" click
     gridPageInitial: 12      // number of cards rendered on first paint
+  },
+
+  // ---------------------------------------------------------------------
+  // SHIPPING — flat fee below the threshold, free at/above it.
+  // Change these two numbers only; the cart page reads from here.
+  // ---------------------------------------------------------------------
+  shipping: {
+    freeThreshold: 25000,   // order subtotal (EGP) that unlocks free shipping
+    fee: 400                 // flat shipping fee (EGP) below the threshold
   }
 };
