@@ -3,25 +3,10 @@
    All product data lives here as one PRODUCTS array. Every part of the
    site (homepage, catalog, search, product modal) reads from it.
 
-   TO ADD A PRODUCT
-   Easiest: open add-product.html, fill the form, hit Generate, paste the
-   result before the closing "]" below.
-
-   Or copy any object below, give it a new unique "id", and edit:
-     id            unique short code (kebab-case), never change once used
-     name          product name
-     brand         must match an id in SITE_CONFIG.brands (js/config.js)
-     category      must match an id in SITE_CONFIG.categories (js/config.js)
-     subcategory   short label, shown in the product's details table
-     price         number only (currency is set in js/prices.js). 0 or missing
-                   = "Price on request", left out of the cart total
-     description   1-3 sentence description
-     image         main product photo (URL) — PLACEHOLDER, replace with real photos
-     gallery       optional — extra photo URLs shown in the product view
-     featured      true/false — show on homepage "Featured Products"
-     bestseller    true/false — show on homepage "Best Sellers"
-     dateAdded     "YYYY-MM-DD", used by the "Newest" sort
-     tags          lowercase keywords, used by search
+   Generated from manage-products.html on 2026-09-22.
+   To keep managing products, open manage-products.html again and re-upload
+   this file when you're done — it always starts from whatever products.js
+   is currently on the server.
    ========================================================================= */
 
 const PRODUCTS = [
@@ -31,7 +16,7 @@ const PRODUCTS = [
     brand: "refinex",
     category: "botox",
     subcategory: "Standard Vial",
-    price: 4500,
+    price: 1100,
     description: "A standard-vial botulinum toxin type A formulation for the treatment of dynamic facial wrinkles and hyperhidrosis.",
     image: "https://dermatologyhubegypt.com/cdn/shop/files/Refinex100u.png?v=1784661289&width=3840",
     gallery: ["https://beautimedi.com/wp-content/uploads/2026/02/WhatsApp-Image-2026-02-13-at-5.54.35-PM-1.jpeg"],
@@ -46,7 +31,7 @@ const PRODUCTS = [
     brand: "metox",
     category: "botox",
     subcategory: "Standard Vial",
-    price: 4000,
+    price: 1400,
     description: "A 100-unit botulinum toxin type A vial formulated for precise treatment of dynamic wrinkles.",
     image: "https://derma-solution.com/wp-content/uploads/2023/09/metox-2.jpg",
     gallery: ["https://opalnirvana.com/wp-content/uploads/2025/08/Metox_100U_T.jpg"],
@@ -61,7 +46,7 @@ const PRODUCTS = [
     brand: "dysport",
     category: "botox",
     subcategory: "Standard Vial",
-    price: 6500,
+    price: 2500,
     description: "A widely used botulinum toxin type A formulation for wrinkle treatment and management of excessive sweating.",
     image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT-NQZVmplKW4S5LyOaf_k91GqHJTdnLw15YRGIESW-NA&s=10",
     gallery: ["https://dkud4u09qff41.cloudfront.net/Products/e3911f49-552e-4765-9759-004a57cb6a7f.jpeg"],
@@ -76,7 +61,7 @@ const PRODUCTS = [
     brand: "evetox",
     category: "botox",
     subcategory: "Standard Vial",
-    price: 4000,
+    price: 1900,
     description: "A botulinum toxin type A vial designed to smooth dynamic facial lines and refresh expression.",
     image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTfabC8Frew82yO9hHsdDtcOzvitcPxDZ5a1_rDWQndDKOzFBztQ1RPr7U&s=10",
     gallery: ["https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSF4sSpCnsEpB4TAzzmQmc-ntaCzA9fhNOW-x9ttXu3ixIYcC2JNv5ZNAI&s=10"],
@@ -91,7 +76,7 @@ const PRODUCTS = [
     brand: "nabota",
     category: "botox",
     subcategory: "Standard Vial",
-    price: 5200,
+    price: 2200,
     description: "A 100-unit botulinum toxin type A formulation for dynamic wrinkle correction.",
     image: "https://celmade.co/cdn/shop/files/imgi_186_nabota-100units.jpg?v=1766416285",
     gallery: ["https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS0T9V-ug-fp9rAhFXOnVhVtz3nk6p7OBjBnVLIWt-vRz-6kzhzzrzhX2Ox&s=10"],
@@ -106,7 +91,7 @@ const PRODUCTS = [
     brand: "demure",
     category: "dermal-fillers",
     subcategory: "Volumizing & Contouring",
-    price: 6500,
+    price: 3000,
     description: "A hyaluronic-acid gel designed for facial and body volumizing and contouring.",
     image: "https://cosmohub1.com/wp-content/uploads/2025/03/1000028877-600x600.jpg",
     gallery: ["https://mamak-paziresh.ir/wp-content/uploads/2025/10/WhatsApp-Image-2025-12-24-at-1.17.34-PM.jpeg"],
@@ -121,7 +106,7 @@ const PRODUCTS = [
     brand: "demure",
     category: "dermal-fillers",
     subcategory: "Volumizing & Contouring",
-    price: 6500,
+    price: 3000,
     description: "A higher-volume hyaluronic-acid gel for facial and body contouring procedures.",
     image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS9uacRkyHynzV51BSNfz6KgSum0An09IlLstJzpv34oD4lwwNFjVF6fDRw&s=10",
     gallery: ["https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ25sJjG2U_37zNHu4MVuxlaFhZxy10uHVsqMVwjjZC_LsNg3Qr448ZEzA&s=10"],
@@ -136,7 +121,7 @@ const PRODUCTS = [
     brand: "dermofil",
     category: "dermal-fillers",
     subcategory: "High Viscosity",
-    price: 1900,
+    price: 3000,
     description: "A high-viscosity hyaluronic-acid filler intended for deep structural placement.",
     image: "https://cosmohub1.com/wp-content/uploads/2025/03/1000034631-scaled.jpg",
     gallery: ["https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT76meGl3i_XLzxgxMkzRhlnB3xGqWVCdfogbk3fwdHHvZPkZaRdkKLiNP9&s=10"],
@@ -151,7 +136,7 @@ const PRODUCTS = [
     brand: "dermofil",
     category: "dermal-fillers",
     subcategory: "Volumizer",
-    price: 2300,
+    price: 3200,
     description: "A cohesive volumizing gel formulated for mid-face and structural support.",
     image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRsofYuLDW-DyqheVonBLS3OM__cqlmWcpl8DAlXdyiaNLD-xYtm5-VdAF3&s=10",
     gallery: ["https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRZLRja4-wlyg207v1ylmz1wDIBk--aoJ7xF2P8DMODyg&s=10"],
@@ -166,7 +151,7 @@ const PRODUCTS = [
     brand: "hyamax",
     category: "dermal-fillers",
     subcategory: "Contour",
-    price: 6500,
+    price: 2800,
     description: "A white-label hyaluronic-acid gel for facial contouring and body sculpting.",
     image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTEMeJ66a7pi-j4j5anJNU8-P4LoyhVt1S_Tj3yPi2KvGkQ5ECWLoeqARw8&s=10",
     gallery: ["https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT7PZb4gycel6bf9vK3C2qRvOmK2u2TTU-fjmvp_Pngv1KKuS9kD_8Y1qQ&s=10"],
@@ -181,7 +166,7 @@ const PRODUCTS = [
     brand: "hyamax",
     category: "dermal-fillers",
     subcategory: "Contour",
-    price: 6500,
+    price: 3000,
     description: "A hyaluronic-acid gel formulated for definition of larger contouring areas.",
     image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR4BxTAfeNHlhF5JmSqhrvjXmW1AP15MXWMxBIwq9aZY4McLtIzpcVrxVg&s=10",
     gallery: ["https://cosmohub1.com/wp-content/uploads/2025/07/1000028868-600x600.jpg"],
@@ -196,7 +181,7 @@ const PRODUCTS = [
     brand: "hyamax",
     category: "dermal-fillers",
     subcategory: "Volumizer",
-    price: 6500,
+    price: 2700,
     description: "A high-capacity volumizing hyaluronic-acid gel for facial and body use.",
     image: "https://api.yasso.store/img.php?src=uploads%2Fprod_1786784293_32eeaae233b823de.jpg&w=400",
     featured: false,
@@ -204,15 +189,13 @@ const PRODUCTS = [
     dateAdded: "2026-03-06",
     tags: ["filler", "volumizer", "hyaluronic acid", "10 ml"]
   },
-
-// اللي تحت ده مفيش صوره لسه
   {
     id: "master-treat-extreme-black",
     name: "Master Treat Extreme (Black) (1 ml)",
     brand: "master-treat",
     category: "dermal-fillers",
     subcategory: "Extreme Density",
-    price: 2300,
+    price: 2500,
     description: "An extreme-density gel formulated for large-area contouring and definition.",
     image: "https://picsum.photos/seed/aesthera-master-treat-extreme-black/700/860",
     gallery: ["https://picsum.photos/seed/aesthera-master-treat-extreme-black-b/700/860"],
@@ -227,7 +210,7 @@ const PRODUCTS = [
     brand: "audrey",
     category: "dermal-fillers",
     subcategory: "Medium Viscosity",
-    price: 1900,
+    price: 2500,
     description: "A medium-viscosity hyaluronic-acid filler for balanced volumizing results.",
     image: "https://koreanfillers.com/wp-content/uploads/2024/08/Audrey-M-1mL.png",
     featured: false,
@@ -241,7 +224,7 @@ const PRODUCTS = [
     brand: "audrey",
     category: "dermal-fillers",
     subcategory: "High Viscosity",
-    price: 1900,
+    price: 2500,
     description: "A high-viscosity hyaluronic-acid filler for structural definition.",
     image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQf0sUKWfvtwjN4vp7kTutEfrRrlvgC9b3o6Wiq5dCXdg&s=10",
     gallery: ["https://faroha.com/wp-content/uploads/2022/08/lidoAn.jpg"],
@@ -256,7 +239,7 @@ const PRODUCTS = [
     brand: "revolax",
     category: "dermal-fillers",
     subcategory: "Sub-Q",
-    price: 1900,
+    price: 1100,
     description: "A dense hyaluronic-acid gel formulated for deep sub-dermal volumizing.",
     image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSXi2j6rvQNLU2dn0J7BCkEWrxb7TzkruJrZcvPoKX21Q&s=10",
     gallery: ["https://jolifill.de/cdn/shop/files/REVOLAX-SUB-Q-LIDOCAINE-1-X-1_1ML-SPRITZE-VERPACKUNG.webp?v=1769093251"],
@@ -271,7 +254,7 @@ const PRODUCTS = [
     brand: "master-treat",
     category: "dermal-fillers",
     subcategory: "Standard Density",
-    price: 1900,
+    price: 2500,
     description: "A standard-density hyaluronic-acid gel for general facial revitalization and fine-line improvement.",
     image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRUU-gztWU4BZuqpiZlUXRjFIlJ47XBIrC6vF_UTWsg1Q&s=10",
     gallery: ["https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQzXFRkBe8BlUOgiTFQLBko0jYWpWcrvYqWEfdTIvZqhQ&s=10"],
@@ -301,7 +284,7 @@ const PRODUCTS = [
     brand: "sedyfill",
     category: "dermal-fillers",
     subcategory: "Body Contouring",
-    price: 4500,
+    price: 5500,
     description: "A large-format hyaluronic-acid gel for body contouring and volumizing.",
     image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQEXEtzcchvgwrHnJ3ac8GRIkl9hmDaYj_BjDF1ACXbBg&s=10",
     gallery: ["https://shopme365.com/image/cache/wkseller/23229/e4-600x315w.jpg"],
@@ -316,7 +299,7 @@ const PRODUCTS = [
     brand: "sedyfill",
     category: "dermal-fillers",
     subcategory: "Body Contouring",
-    price: 6000,
+    price: 6500,
     description: "A large-format hyaluronic-acid gel for body contouring and volumizing.",
     image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT3jV8pUdiT6gTGEZYX15dbH48DdPgmw32Hl67E-5VF9A&s=10",
     gallery: ["https://cdn.pddmooncdn.com/uploads/161395/cart/resources/20250813/F77BB62F-5F31-A751-6E97-3A896CA393CB.jpg"],
@@ -346,7 +329,7 @@ const PRODUCTS = [
     brand: "celosome",
     category: "dermal-fillers",
     subcategory: "Soft Density",
-    price: 1900,
+    price: 1500,
     description: "A soft-density filler suited to superficial lines around the eyes and lips.",
     image: "https://fillerfyco.com/wp-content/uploads/2026/07/wholesaleclosomesoft-465x465.webp",
     gallery: ["https://i0.wp.com/www.pharmacoline.com/wp-content/uploads/2023/10/12138-Celosome-Soft.jpg?fit=1000%2C1000&ssl=1"],
@@ -361,7 +344,7 @@ const PRODUCTS = [
     brand: "celosome",
     category: "dermal-fillers",
     subcategory: "Medium Density",
-    price: 1900,
+    price: 1500,
     description: "A medium-density filler for balanced facial revitalization.",
     image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR8g72gFmS8PxrhQeY1hSXNbGlcpSSF4_VxzUR1EXf66w&s=10",
     gallery: ["https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ31E9G0fB4loBuVol2dixqEmpj3XsIqLiZbVBEfVZE-A&s=10"],
@@ -376,7 +359,7 @@ const PRODUCTS = [
     brand: "celosome",
     category: "dermal-fillers",
     subcategory: "Strong Density",
-    price: 2300,
+    price: 1500,
     description: "A strong-density filler formulated for larger-area contouring and definition.",
     image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSNk5tfatJkVq3wCEZdyMsp5tQceCulLrU6bCrcFmPqsPNmPIGlSjpdCWXy&s=10",
     gallery: ["https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSZOuOSlne0ybmsFkAoEIbE-u1UW547iE-ol1vje_s1gbuVUoTMmvdOv5tE&s=10"],
@@ -391,7 +374,7 @@ const PRODUCTS = [
     brand: "celosome",
     category: "dermal-fillers",
     subcategory: "Implant Grade",
-    price: 2300,
+    price: 1500,
     description: "An implant-grade filler intended for deep structural placement.",
     image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQRE7dP4ktRI7sAT7UCvdHnf2elF2wbKhHpCCwDtmKoRQ&s=10",
     gallery: ["https://meamoshop.com/wp-content/uploads/2025/02/Celosome-Impact-with-Syringe.webp"],
@@ -406,7 +389,7 @@ const PRODUCTS = [
     brand: "revolax",
     category: "dermal-fillers",
     subcategory: "Deep Density",
-    price: 2300,
+    price: 1100,
     description: "A deep-density hyaluronic-acid gel for superficial-to-deep line correction around the eyes and lips.",
     image: "https://prpmed.de/1175-thickbox_default/revolax-deep-with-lidocaine-11-ml.jpg",
     gallery: ["https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRNng4UF9NGSUqaHF13LSNrvoSnc4jQBkfrSK0p1STMDeCcFnxiPhhIlAM&s=10"],
@@ -421,7 +404,7 @@ const PRODUCTS = [
     brand: "sculptra",
     category: "dermal-fillers",
     subcategory: "Poly-L-Lactic Acid",
-    price: 6500,
+    price: 5000,
     description: "A poly-L-lactic acid (PLLA) biostimulator for gradual, long-lasting collagen stimulation.",
     image: "https://res.cloudinary.com/dbeuhr91i/image/upload/f_webp,q_auto,dpr_auto,c_limit/v1778511839/products/a3as78d1ge5f2dibem9k.jpg",
     gallery: ["https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR0g8LKplqzFKdQqRHOLx9PsfUlDS-stXamzMM97_C8SPKoBDqBomhhCa4&s=10"],
@@ -430,7 +413,7 @@ const PRODUCTS = [
     dateAdded: "2026-05-20",
     tags: ["filler", "plla", "collagen stimulator", "1 vial"]
   },
-   {
+  {
     id: "olidia-plla",
     name: "Olidia PLLA Bio-stimulator (1 vial)",
     brand: "olidia",
@@ -451,7 +434,7 @@ const PRODUCTS = [
     brand: "vom",
     category: "dermal-fillers",
     subcategory: "Intense HA Density",
-    price: 2300,
+    price: 2000,
     description: "An intense-density hyaluronic-acid filler for pronounced volumizing and contouring.",
     image: "https://celmade.co/cdn/shop/files/imgi_222_vom-o-intensive-brunodermalfillercom-562120.jpg?v=1766416286",
     featured: false,
@@ -465,7 +448,7 @@ const PRODUCTS = [
     brand: "premium",
     category: "dermal-fillers",
     subcategory: "Hyaluronidase",
-    price: 900,
+    price: 3000,
     description: "A hyaluronidase enzyme preparation used to dissolve hyaluronic-acid filler.",
     image: "https://derma-solution.com/wp-content/uploads/2021/08/liporase-bg.png",
     gallery: ["https://derma-solution.com/wp-content/uploads/2026/08/liporase-3-1.png"],
@@ -495,7 +478,7 @@ const PRODUCTS = [
     brand: "hyamax",
     category: "dermal-fillers",
     subcategory: "Fine Lines",
-    price: 1900,
+    price: 3500,
     description: "A hyaluronic-acid gel formulated for lip enhancement and superficial lines around the mouth.",
     image: "https://i0.wp.com/pharmadiv.co.za/wp-content/uploads/2026/06/300Wx300H-106756-01.png?fit=300%2C300&ssl=1",
     featured: false,
@@ -610,7 +593,7 @@ const PRODUCTS = [
     brand: "hyamax",
     category: "dermal-fillers",
     subcategory: "Calcium Hydroxyapatite",
-    price: 5500,
+    price: 4000,
     description: "A calcium-hydroxyapatite formulation for structural volumizing and contouring.",
     image: "https://beautimedi.com/wp-content/uploads/2026/02/WhatsApp-Image-2026-02-16-at-11.49.42-AM.jpeg",
     featured: false,
@@ -618,8 +601,6 @@ const PRODUCTS = [
     dateAdded: "2026-07-24",
     tags: ["filler", "calcium hydroxyapatite", "1 ml"]
   },
-
-// اللي تحت ده مفيش صوره لسه
   {
     id: "volume-red-ha",
     name: "Volumizing HA Red (1 ml)",
@@ -629,7 +610,6 @@ const PRODUCTS = [
     price: 2300,
     description: "A red-labeled volumizing hyaluronic-acid gel for facial contouring.",
     image: "",
-    gallery: [],
     featured: false,
     bestseller: false,
     dateAdded: "2026-07-29",
@@ -641,7 +621,7 @@ const PRODUCTS = [
     brand: "revolax",
     category: "dermal-fillers",
     subcategory: "Fine Viscosity",
-    price: 1900,
+    price: 1100,
     description: "A fine-viscosity filler formulated for superficial fine lines.",
     image: "https://e-fillers.com/storage/uploads/products/revolaxtm-fine-lidocaine-11ml/1674815235055_27_1.webp",
     gallery: ["https://shopme365.com/image/cache/wkseller/23229/r5-550x550.jpeg"],
@@ -686,7 +666,7 @@ const PRODUCTS = [
     brand: "bella",
     category: "dermal-fillers",
     subcategory: "Fine",
-    price: 3000,
+    price: 2200,
     description: "A fine-formulation hyaluronic-acid filler for delicate facial areas.",
     image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTYyjWLHhcOzTvD1O3Bg5ZLEWXPSKoFIzWrdZFQbZWbzxPX8vPSMumAz-yF&s=10",
     gallery: ["https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRP0s2RFivtT3tSGEgjUkwUGP8JaVkrYkKwVEOBOMhX9AaWKqQdSZg_veLq&s=10"],
@@ -701,7 +681,7 @@ const PRODUCTS = [
     brand: "bella",
     category: "dermal-fillers",
     subcategory: "Deep",
-    price: 3000,
+    price: 2200,
     description: "A deep-formulation hyaluronic-acid filler for structural volumizing.",
     image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRjHcU9cXTcIJbCasc1Pit4VcF341VW9P0-B8oDr41H4IbD4-6N0merbsY&s=10",
     gallery: ["https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQzp4JFmVf5qT92e19ki8sNwiw7Jb0Mr6_yoOo0IZFcf1JbydVSP5v8tKo&s=10"],
@@ -716,7 +696,7 @@ const PRODUCTS = [
     brand: "bella",
     category: "dermal-fillers",
     subcategory: "Derm",
-    price: 3000,
+    price: 2200,
     description: "A dermal-layer hyaluronic-acid filler for mid-depth placement.",
     image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQt4UD97NTH51fEJ8xiTido5u6_4DFsb4i4nv4SdSVJduLChQmiWCqdZi4&s=10",
     gallery: ["https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS2ByQzZZ28TyWsPYjUHmV2lr6HA0jbkBKpFtdXZRFUZKgmkw0gTD109r8&s=10"],
@@ -731,7 +711,7 @@ const PRODUCTS = [
     brand: "bella",
     category: "dermal-fillers",
     subcategory: "Fine",
-    price: 1900,
+    price: 1400,
     description: "A fine-formulation hyaluronic-acid filler for delicate facial areas.",
     image: "https://ueeshop.ly200-cdn.com/u_file/UPBB/UPBB605/2608/25/products/FINE-1.jpg?x-oss-process=image/quality,q_100/resize,m_lfit,h_945,w_945",
     gallery: ["https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQHWDIVvRrRrD6jmYwRyA2KSv7bXTXIDyNzVaWBa2UWGg&s=10"],
@@ -746,7 +726,7 @@ const PRODUCTS = [
     brand: "bella",
     category: "dermal-fillers",
     subcategory: "Deep",
-    price: 2300,
+    price: 1400,
     description: "A deep-formulation hyaluronic-acid filler for structural volumizing.",
     image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRjHcU9cXTcIJbCasc1Pit4VcF341VW9P0-B8oDr41H4IbD4-6N0merbsY&s=10",
     gallery: ["https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQzp4JFmVf5qT92e19ki8sNwiw7Jb0Mr6_yoOo0IZFcf1JbydVSP5v8tKo&s=10"],
@@ -761,7 +741,7 @@ const PRODUCTS = [
     brand: "bella",
     category: "dermal-fillers",
     subcategory: "Derm",
-    price: 1900,
+    price: 1400,
     description: "A dermal-layer hyaluronic-acid filler for mid-depth placement.",
     image: "https://ueeshop.ly200-cdn.com/u_file/UPBB/UPBB605/2608/25/products/DERM-1.jpg?x-oss-process=image/quality,q_100/resize,m_lfit,h_640,w_640",
     gallery: ["https://ueeshop.ly200-cdn.com/u_file/UPBB/UPBB605/2608/25/products/DERM-5.jpg?x-oss-process=image/quality,q_100/resize,m_lfit,h_640,w_640"],
@@ -776,7 +756,7 @@ const PRODUCTS = [
     brand: "bella",
     category: "dermal-fillers",
     subcategory: "Fine",
-    price: 3800,
+    price: 2000,
     description: "A fine-formulation hyaluronic-acid filler for delicate facial areas.",
     image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTYyjWLHhcOzTvD1O3Bg5ZLEWXPSKoFIzWrdZFQbZWbzxPX8vPSMumAz-yF&s=10",
     gallery: ["https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRP0s2RFivtT3tSGEgjUkwUGP8JaVkrYkKwVEOBOMhX9AaWKqQdSZg_veLq&s=10"],
@@ -791,7 +771,7 @@ const PRODUCTS = [
     brand: "bella",
     category: "dermal-fillers",
     subcategory: "Deep",
-    price: 4200,
+    price: 2000,
     description: "A deep-formulation hyaluronic-acid filler for structural volumizing.",
     image: "https://ueeshop.ly200-cdn.com/u_file/UPBB/UPBB605/2608/25/products/DEEP-1.jpg?x-oss-process=image/quality,q_100/resize,m_lfit,h_640,w_640",
     gallery: ["https://ueeshop.ly200-cdn.com/u_file/UPBB/UPBB605/2608/25/products/DEEP-5.jpg?x-oss-process=image/quality,q_100/resize,m_lfit,h_640,w_640"],
@@ -806,7 +786,7 @@ const PRODUCTS = [
     brand: "bella",
     category: "dermal-fillers",
     subcategory: "Derm",
-    price: 3800,
+    price: 2000,
     description: "A dermal-layer hyaluronic-acid filler for mid-depth placement.",
     image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR-vS4k6U-Zqw0CJTT6DvOoatR3o0zV9c2WkmMULr2g5CPdj3Gt52Nl3sDO&s=10",
     gallery: ["https://ueeshop.ly200-cdn.com/u_file/UPBB/UPBB605/2608/25/products/DERM-5.jpg?x-oss-process=image/quality,q_100/resize,m_lfit,h_640,w_640"],
@@ -815,8 +795,6 @@ const PRODUCTS = [
     dateAdded: "2026-09-27",
     tags: ["filler", "bella", "derm", "2 ml"]
   },
-
-  // اللي تحت ده برده مفيش صوره لسه
   {
     id: "bella-red-lips-2x1ml",
     name: "Bella Red Lips (2 x 1 ml)",
@@ -826,7 +804,6 @@ const PRODUCTS = [
     price: 3000,
     description: "A hyaluronic-acid filler formulated specifically for lip enhancement.",
     image: "",
-    gallery: [],
     featured: true,
     bestseller: true,
     dateAdded: "2026-10-02",
@@ -838,7 +815,7 @@ const PRODUCTS = [
     brand: "bella",
     category: "dermal-fillers",
     subcategory: "Sub-Skin",
-    price: 6500,
+    price: 3000,
     description: "A large-format sub-skin hyaluronic-acid filler for body use.",
     image: "https://ueeshop.ly200-cdn.com/u_file/UPBB/UPBB605/2608/25/products/SUB-SKIN-1.jpg?x-oss-process=image/quality,q_100/resize,m_lfit,h_945,w_945",
     gallery: ["https://ueeshop.ly200-cdn.com/u_file/UPBB/UPBB605/2510/27/products/subskin.jpg"],
@@ -853,7 +830,7 @@ const PRODUCTS = [
     brand: "bella",
     category: "dermal-fillers",
     subcategory: "Deep",
-    price: 6500,
+    price: 3000,
     description: "A large-format deep hyaluronic-acid filler for body contouring.",
     image: "https://www.easyimport.org/_next/image?url=https%3A%2F%2Fcdn.pazh.net%2Fpublic%2Fproduct%2Fbella-filler-deep-model%2F17846262293161d1-1080x1080.webp&w=3840&q=75",
     featured: false,
@@ -867,7 +844,7 @@ const PRODUCTS = [
     brand: "bella",
     category: "dermal-fillers",
     subcategory: "Derm",
-    price: 6500,
+    price: 3000,
     description: "A large-format dermal-layer hyaluronic-acid filler for body use.",
     image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS2X4jHOtPLGQWzKbhTIqcGdBEi7DVhxQLlVjsOzFlSdMqa9draDINVHH_z&s=10",
     gallery: ["https://ueeshop.ly200-cdn.com/u_file/UPBB/UPBB605/2608/25/products/DERM-5.jpg?x-oss-process=image/quality,q_100/resize,m_lfit,h_640,w_640"],
@@ -882,7 +859,7 @@ const PRODUCTS = [
     brand: "bella",
     category: "dermal-fillers",
     subcategory: "Body",
-    price: 3750,
+    price: 5500,
     description: "A large-format hyaluronic-acid body filler for extensive contouring.",
     image: "https://ueeshop.ly200-cdn.com/u_file/UPBB/UPBB605/2408/21/products/de6b2a61a8.png?x-oss-process=image/quality,q_100/resize,m_lfit,h_640,w_640",
     featured: false,
@@ -896,7 +873,7 @@ const PRODUCTS = [
     brand: "bella",
     category: "dermal-fillers",
     subcategory: "Body",
-    price: 4500,
+    price: 5500,
     description: "A concentrated hyaluronic-acid body filler for extensive contouring.",
     image: "https://ueeshop.ly200-cdn.com/u_file/UPBB/UPBB605/2408/21/products/de6b2a61a8.png?x-oss-process=image/quality,q_100/resize,m_lfit,h_640,w_640",
     featured: false,
@@ -938,7 +915,7 @@ const PRODUCTS = [
     brand: "bella",
     category: "dermal-fillers",
     subcategory: "PLLA Stimulator",
-    price: 6500,
+    price: 3000,
     description: "A poly-L-lactic acid biostimulator for long-lasting collagen stimulation.",
     image: "https://ueeshop.ly200-cdn.com/u_file/UPBB/UPBB605/2608/25/products/PLLA-1.jpg?x-oss-process=image/format,webp/quality,q_100/resize,m_lfit,h_640,w_640",
     gallery: ["https://ueeshop.ly200-cdn.com/u_file/UPBB/UPBB605/2608/25/products/PLLA-5.jpg?x-oss-process=image/format,webp/quality,q_100/resize,m_lfit,h_640,w_640"],
@@ -953,7 +930,7 @@ const PRODUCTS = [
     brand: "bella",
     category: "dermal-fillers",
     subcategory: "Calcium Hydroxyapatite",
-    price: 5500,
+    price: 3500,
     description: "A calcium-hydroxyapatite filler for structural volumizing and contouring.",
     image: "https://ueeshop.ly200-cdn.com/u_file/UPBB/UPBB605/2412/18/products/photobank3-14c6.jpg?x-oss-process=image/quality,q_100/resize,m_lfit,h_500,w_500",
     gallery: ["https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRbOaAVDnVpSgCXzg1aqkWMpRElbvThYb-pj2yFEN6ylVgeaRgkcejFxA&s=10"],
@@ -962,9 +939,6 @@ const PRODUCTS = [
     dateAdded: "2026-01-20",
     tags: ["filler", "bella", "calcium hydroxyapatite", "1 vial"]
   },
-
-
- // اللي تحت ده برده مفيش صوره لسه
   {
     id: "hadurage-joint-2ml",
     name: "Hadurage Joint Filler (2 ml)",
@@ -974,13 +948,11 @@ const PRODUCTS = [
     price: 3000,
     description: "An intra-articular hyaluronic-acid preparation for joint viscosupplementation.",
     image: "",
-    gallery: [],
     featured: false,
     bestseller: false,
     dateAdded: "2026-01-25",
     tags: ["joint filler", "intra-articular", "2 ml"]
   },
-    // اللي تحت ده برده مفيش صوره لسه
   {
     id: "hadurage-joint-3ml",
     name: "Hadurage Joint Filler (3 ml)",
@@ -990,7 +962,6 @@ const PRODUCTS = [
     price: 3800,
     description: "An intra-articular hyaluronic-acid preparation for joint viscosupplementation.",
     image: "",
-    gallery: [],
     featured: false,
     bestseller: false,
     dateAdded: "2026-01-30",
@@ -1016,7 +987,7 @@ const PRODUCTS = [
     brand: "maxyfill",
     category: "dermal-fillers",
     subcategory: "Body Contouring",
-    price: 5250,
+    price: 7000,
     description: "A large-format hyaluronic-acid gel for extensive body contouring.",
     image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRIwlDDecxFg27TbNf9g2XFsKKJ8ioLdFqToiHCxHi16Q&s=10",
     gallery: ["https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSgFInQ525r9CE8kj3RHcF0rJnZ_nv9ncvD1MZVIh9CLzyBmtsalxn023I&s=10"],
@@ -1025,8 +996,6 @@ const PRODUCTS = [
     dateAdded: "2026-02-09",
     tags: ["filler", "body", "contouring", "70 cc"]
   },
-
-    // اللي تحت ده برده مفيش صوره لسه
   {
     id: "audrey-50ml-h",
     name: "Audrey High Density (50 ml)",
@@ -1036,7 +1005,6 @@ const PRODUCTS = [
     price: 16500,
     description: "A large-format high-density hyaluronic-acid gel for body contouring.",
     image: "",
-    gallery: [],
     featured: false,
     bestseller: false,
     dateAdded: "2026-02-14",
@@ -1091,7 +1059,7 @@ const PRODUCTS = [
     brand: "demure",
     category: "dermal-fillers",
     subcategory: "Ultra",
-    price: 9000,
+    price: 3000,
     description: "A large-format hyaluronic-acid gel for body volumizing and contouring.",
     image: "https://www.demurefiller.com/wp-content/uploads/2026/01/10ml-Ultra-Description-2.jpg",
     gallery: ["https://www.demurefiller.com/wp-content/uploads/2026/01/10ml-Ultra-Description-3.jpg"],
@@ -1121,7 +1089,7 @@ const PRODUCTS = [
     brand: "hyaron",
     category: "skin-boosters",
     subcategory: "Sodium Hyaluronate",
-    price: 2000,
+    price: 5000,
     description: "A sodium-hyaluronate skin booster formulated to support hydration and skin quality.",
     image: "https://fyaestheticboutique.co.uk/wp-content/uploads/2026/02/hyaron-scaled-4.jpg",
     gallery: ["https://cosmetix.eu/hpeciai/a0fe385de2d23a407afbfacc41fea23e/eng_pl_Hyaron-2-5ml-433_1_1.jpg"],
@@ -1136,7 +1104,7 @@ const PRODUCTS = [
     brand: "aqua",
     category: "skin-boosters",
     subcategory: "Exosome Complex",
-    price: 1900,
+    price: 7000,
     description: "An exosome-complex skin booster formulated to support skin revitalization.",
     image: "https://westcoastpartners.com/cdn/shop/files/HyalMass_Aqua-Exosome.webp?v=1724073765",
     gallery: ["https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRO5nTjSHL1C5AQQhcFnt2hPdNMk5U7wv4isrSxhaweaE_PQr245qTAi24&s=10"],
@@ -1179,7 +1147,7 @@ const PRODUCTS = [
     brand: "mesoheal",
     category: "skin-boosters",
     subcategory: "Succinic Acid + HA",
-    price: 1900,
+    price: 6500,
     description: "A succinic-acid and hyaluronic-acid complex formulated to support skin radiance.",
     image: "https://filler-direct.co.uk/wp-content/uploads/2025/07/Mesoheal%C2%AE-Amber-Glow-10-vials-x-5ml.jpg",
     gallery: ["https://dermarolleronlinestore.co.za/wp-content/uploads/2024/05/Mesoheal_amber_Glow.jpg"],
@@ -1188,8 +1156,6 @@ const PRODUCTS = [
     dateAdded: "2026-04-05",
     tags: ["skin booster", "succinic acid", "glow", "1 vial"]
   },
-
-      // اللي تحت ده برده مفيش صوره لسه
   {
     id: "dermofil-super-hydra",
     name: "Dermofil Super Hydra (1 vial)",
@@ -1199,7 +1165,6 @@ const PRODUCTS = [
     price: 1900,
     description: "A hydration-focused complex skin booster for improved skin moisture retention.",
     image: "",
-    gallery: [],
     featured: false,
     bestseller: false,
     dateAdded: "2026-04-10",
@@ -1211,7 +1176,7 @@ const PRODUCTS = [
     brand: "rrs",
     category: "skin-boosters",
     subcategory: "HA + Amino Acids",
-    price: 1900,
+    price: 3500,
     description: "A hyaluronic-acid and amino-acid complex formulated for long-lasting skin revitalization.",
     image: "https://en.topdermal.com/wp-content/uploads/2018/06/Y2A7436.jpg",
     gallery: ["https://www.fillermarket.com/1804-large_default/skin-tech-aesthetic-dermal-rrs-ha-long-lasting.jpg"],
@@ -1226,7 +1191,7 @@ const PRODUCTS = [
     brand: "rrs",
     category: "skin-boosters",
     subcategory: "Pure HA",
-    price: 2400,
+    price: 3000,
     description: "A pure hyaluronic-acid skin booster formulated for skin hydration and quality.",
     image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSSYLgrFSWvYqKM6LNgbvP8fvu12sJv54Qc9_x5ZlGOK5zKZoNz7i77a_E&s=10",
     featured: false,
@@ -1234,8 +1199,6 @@ const PRODUCTS = [
     dateAdded: "2026-04-20",
     tags: ["skin booster", "hyaluronic acid", "750 mg"]
   },
-
-      // اللي تحت ده برده مفيش صوره لسه
   {
     id: "booster-starter-kit",
     name: "Multi-Component Booster Kit (1 kit)",
@@ -1245,7 +1208,6 @@ const PRODUCTS = [
     price: 3500,
     description: "A multi-component starter kit for skin-booster treatment sessions.",
     image: "",
-    gallery: [],
     featured: false,
     bestseller: false,
     dateAdded: "2026-04-25",
@@ -1257,7 +1219,7 @@ const PRODUCTS = [
     brand: "jalupro",
     category: "skin-boosters",
     subcategory: "HA + Amino Acids + Peptides",
-    price: 1900,
+    price: 4000,
     description: "A hyaluronic-acid, amino-acid and peptide complex for skin revitalization.",
     image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTzETj1d40MvhYg9HqnLj2FUk5CPKqzOv4Bf6oqNNP6ag&s=10",
     gallery: ["https://jolifill.de/cdn/shop/files/JALUPRO-SUPER-HYDRO-2.5ML-PRODUKT-VERPACKUNG.webp?v=1779804849"],
@@ -1296,8 +1258,6 @@ const PRODUCTS = [
     dateAdded: "2026-05-10",
     tags: ["skin booster", "bella", "hyaluronic acid", "2 ml"]
   },
-
-      // اللي تحت ده برده مفيش صوره لسه
   {
     id: "hadurage-pdrn-2ml",
     name: "Hadurage PDRN Skin Booster (2 ml)",
@@ -1307,7 +1267,6 @@ const PRODUCTS = [
     price: 2100,
     description: "A PDRN skin booster formulated to support skin repair and revitalization.",
     image: "",
-    gallery: [],
     featured: false,
     bestseller: false,
     dateAdded: "2026-05-15",
@@ -1328,8 +1287,6 @@ const PRODUCTS = [
     dateAdded: "2026-05-20",
     tags: ["skin booster", "collagen", "1 vial"]
   },
-
-      // اللي تحت ده برده مفيش صوره لسه
   {
     id: "everline-meso-booster",
     name: "Everline Meso-Booster Complex (1 vial)",
@@ -1339,7 +1296,6 @@ const PRODUCTS = [
     price: 1900,
     description: "A multi-active meso-booster complex for skin revitalization sessions.",
     image: "",
-    gallery: [],
     featured: false,
     bestseller: false,
     dateAdded: "2026-05-25",
@@ -1427,7 +1383,6 @@ const PRODUCTS = [
     price: 1100,
     description: "A PDRN vial set formulated for mesotherapy revitalization sessions.",
     image: "https://ueeshop.ly200-cdn.com/u_file/UPBB/UPBB605/2608/25/products/C-PDRN-1.jpg?x-oss-process=image/format,webp/quality,q_100/resize,m_lfit,h_640,w_640",
-    gallery: [],
     featured: false,
     bestseller: false,
     dateAdded: "2026-06-24",
@@ -1439,7 +1394,7 @@ const PRODUCTS = [
     brand: "bella",
     category: "mesotherapy",
     subcategory: "Fullerene Vials",
-    price: 1100,
+    price: 2500,
     description: "A fullerene-complex vial set formulated for mesotherapy sessions.",
     image: "https://ueeshop.ly200-cdn.com/u_file/UPBB/UPBB605/2608/25/products/FULLERENE-1.jpg?x-oss-process=image/format,webp/quality,q_100/resize,m_lfit,h_640,w_640",
     gallery: ["https://ueeshop.ly200-cdn.com/u_file/UPBB/UPBB605/2608/25/products/FULLERENE-5-153727926e.jpg?x-oss-process=image/format,webp/quality,q_100/resize,m_lfit,h_640,w_640"],
@@ -1454,7 +1409,7 @@ const PRODUCTS = [
     brand: "bella",
     category: "mesotherapy",
     subcategory: "Vitamin B12 Vials",
-    price: 1100,
+    price: 2500,
     description: "A vitamin B12 vial set formulated for mesotherapy sessions.",
     image: "https://ueeshop.ly200-cdn.com/u_file/UPBB/UPBB605/2608/25/products/VITAMINB12-1.jpg?x-oss-process=image/format,webp/quality,q_100/resize,m_lfit,h_640,w_640",
     gallery: ["https://ueeshop.ly200-cdn.com/u_file/UPBB/UPBB605/2608/25/products/VITAMINB12-5.jpg?x-oss-process=image/format,webp/quality,q_100/resize,m_lfit,h_640,w_640"],
@@ -1469,7 +1424,7 @@ const PRODUCTS = [
     brand: "bella",
     category: "mesotherapy",
     subcategory: "Glutathione Vials",
-    price: 1100,
+    price: 2500,
     description: "A glutathione vial set formulated for brightening mesotherapy sessions.",
     image: "https://ueeshop.ly200-cdn.com/u_file/UPBB/UPBB605/2608/25/products/GLUTATHIONE-1.jpg?x-oss-process=image/format,webp/quality,q_100/resize,m_lfit,h_640,w_640",
     gallery: ["https://ueeshop.ly200-cdn.com/u_file/UPBB/UPBB605/2608/25/products/GLUTATHIONE-5.jpg?x-oss-process=image/format,webp/quality,q_100/resize,m_lfit,h_640,w_640"],
@@ -1484,7 +1439,7 @@ const PRODUCTS = [
     brand: "bella",
     category: "mesotherapy",
     subcategory: "HA + Collagen Vials",
-    price: 1100,
+    price: 2500,
     description: "A hyaluronic-acid and collagen vial set formulated for mesotherapy sessions.",
     image: "https://ueeshop.ly200-cdn.com/u_file/UPBB/UPBB605/2608/25/products/HA18-1.jpg?x-oss-process=image/format,webp/quality,q_100/resize,m_lfit,h_640,w_640",
     gallery: ["https://ueeshop.ly200-cdn.com/u_file/UPBB/UPBB605/2608/25/products/HA18-3.jpg?x-oss-process=image/format,webp/quality,q_100/resize,m_lfit,h_640,w_640"],
@@ -1499,7 +1454,7 @@ const PRODUCTS = [
     brand: "bella",
     category: "mesotherapy",
     subcategory: "Vitamin C Vials",
-    price: 1100,
+    price: 2500,
     description: "A vitamin C vial set formulated for brightening mesotherapy sessions.",
     image: "https://ueeshop.ly200-cdn.com/u_file/UPBB/UPBB605/2608/25/products/VITAMIN-C-1.jpg?x-oss-process=image/format,webp/quality,q_100/resize,m_lfit,h_640,w_640",
     gallery: ["https://ueeshop.ly200-cdn.com/u_file/UPBB/UPBB605/2608/25/products/VITAMIN-C-5.jpg?x-oss-process=image/format,webp/quality,q_100/resize,m_lfit,h_640,w_640"],
@@ -1514,7 +1469,7 @@ const PRODUCTS = [
     brand: "bella",
     category: "mesotherapy",
     subcategory: "Exosome Whitening Formula",
-    price: 1800,
+    price: 2500,
     description: "An exosome-based whitening formula for brightening mesotherapy sessions.",
     image: "https://ueeshop.ly200-cdn.com/u_file/UPBB/UPBB605/2608/25/products/1-153859ffce.png?x-oss-process=image/format,webp/quality,q_100/resize,m_lfit,h_640,w_640",
     gallery: ["https://ueeshop.ly200-cdn.com/u_file/UPBB/UPBB605/2608/25/products/3-153907452d.png?x-oss-process=image/format,webp/quality,q_100/resize,m_lfit,h_640,w_640"],
@@ -1529,7 +1484,7 @@ const PRODUCTS = [
     brand: "bella",
     category: "mesotherapy",
     subcategory: "Exosome Hair Complex",
-    price: 1800,
+    price: 2500,
     description: "An exosome-based hair complex formulated for scalp mesotherapy sessions.",
     image: "https://ueeshop.ly200-cdn.com/u_file/UPBB/UPBB605/2608/25/products/Hair-Growth-1.jpg?x-oss-process=image/format,webp/quality,q_100/resize,m_lfit,h_640,w_640",
     gallery: ["https://ueeshop.ly200-cdn.com/u_file/UPBB/UPBB605/2608/25/products/Hair-Growth-3.jpg?x-oss-process=image/format,webp/quality,q_100/resize,m_lfit,h_640,w_640"],
@@ -1538,57 +1493,48 @@ const PRODUCTS = [
     dateAdded: "2026-07-29",
     tags: ["mesotherapy", "exosome", "hair", "bella", "1 vial"]
   },
-
-        // اللي تحت ده برده مفيش صوره لسه
   {
     id: "bella-antiacne-exosome",
     name: "Bella Anti-Acne Exosome (1 vial)",
     brand: "bella",
     category: "mesotherapy",
     subcategory: "Exosome Anti-Acne",
-    price: 1800,
+    price: 2500,
     description: "An exosome-based formula formulated for acne-focused mesotherapy sessions.",
     image: "",
-    gallery: [],
     featured: false,
     bestseller: false,
     dateAdded: "2026-08-03",
     tags: ["mesotherapy", "exosome", "anti-acne", "bella", "1 vial"]
   },
-
-      // اللي تحت ده برده مفيش صوره لسه
   {
     id: "bella-antiage-exosome",
     name: "Bella Anti-Aging Exosome (1 vial)",
     brand: "bella",
     category: "mesotherapy",
     subcategory: "Exosome Anti-Aging",
-    price: 1800,
+    price: 2500,
     description: "An exosome-based formula formulated for anti-aging mesotherapy sessions.",
     image: "",
-    gallery: [],
     featured: false,
     bestseller: false,
     dateAdded: "2026-08-08",
     tags: ["mesotherapy", "exosome", "anti-aging", "bella", "1 vial"]
   },
-        // اللي تحت ده برده مفيش صوره لسه
   {
     id: "bella-repair-exosome",
     name: "Bella Repair Exosome (1 vial)",
     brand: "bella",
     category: "mesotherapy",
     subcategory: "Exosome Repairing",
-    price: 1800,
+    price: 2500,
     description: "An exosome-based repairing formula for post-procedure mesotherapy sessions.",
     image: "",
-    gallery: [],
     featured: false,
     bestseller: false,
     dateAdded: "2026-08-13",
     tags: ["mesotherapy", "exosome", "repair", "bella", "1 vial"]
   },
-        // اللي تحت ده برده مفيش صوره لسه
   {
     id: "hadurage-pdrn-meso",
     name: "Hadurage PDRN Mesotherapy (1 vial)",
@@ -1598,7 +1544,6 @@ const PRODUCTS = [
     price: 1500,
     description: "A PDRN solution formulated for mesotherapy revitalization sessions.",
     image: "",
-    gallery: [],
     featured: false,
     bestseller: false,
     dateAdded: "2026-08-18",
@@ -1610,7 +1555,7 @@ const PRODUCTS = [
     brand: "hadurage",
     category: "mesotherapy",
     subcategory: "Hair Growth Solution",
-    price: 1500,
+    price: 5000,
     description: "A hair-growth solution formulated for scalp mesotherapy sessions.",
     image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQC0S8XzLcIaTb-WyDb1C9Rad4YXebW5bzAqfuZqpYekA&s=10",
     gallery: ["https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSVtqMIgNNx0reSE2Xb43zZ_ND1kmpyXvSXxMb6UWlxTg&s=10"],
@@ -1619,7 +1564,6 @@ const PRODUCTS = [
     dateAdded: "2026-08-23",
     tags: ["mesotherapy", "hair", "hadurage", "1 vial"]
   },
-        // اللي تحت ده برده مفيش صوره لسه
   {
     id: "vitamin-c-ampoules",
     name: "Pure Vitamin C Ampoules (1 box)",
@@ -1629,13 +1573,11 @@ const PRODUCTS = [
     price: 900,
     description: "Pure vitamin C ampoules formulated for brightening mesotherapy sessions.",
     image: "",
-    gallery: [],
     featured: false,
     bestseller: false,
     dateAdded: "2026-08-28",
     tags: ["mesotherapy", "vitamin c", "1 box"]
   },
-        // اللي تحت ده برده مفيش صوره لسه
   {
     id: "glutathione-vials",
     name: "Glutathione Vials (1 box)",
@@ -1645,7 +1587,6 @@ const PRODUCTS = [
     price: 900,
     description: "Glutathione vials formulated for brightening mesotherapy sessions.",
     image: "",
-    gallery: [],
     featured: false,
     bestseller: false,
     dateAdded: "2026-09-02",
@@ -1657,7 +1598,7 @@ const PRODUCTS = [
     brand: "clinic-select",
     category: "mesotherapy",
     subcategory: "Multi-Ingredient Cocktail",
-    price: 1500,
+    price: 7000,
     description: "A multi-ingredient cocktail formulated for radiance-focused mesotherapy sessions.",
     image: "https://m.media-amazon.com/images/I/61OycJFUv9L.jpg",
     gallery: ["https://resources.facesconsent.com/products-images/17165/809522551-487184229-Pink-Glow-product-photo.jpeg"],
@@ -1666,7 +1607,6 @@ const PRODUCTS = [
     dateAdded: "2026-09-07",
     tags: ["mesotherapy", "cocktail", "glow", "1 vial"]
   },
-        // اللي تحت ده برده مفيش صوره لسه
   {
     id: "rablanca-peeling",
     name: "Rablanca Peeling Pack Solution (1 kit)",
@@ -1676,7 +1616,6 @@ const PRODUCTS = [
     price: 1800,
     description: "A cold peeling-pack solution for surface skin renewal without downtime.",
     image: "",
-    gallery: [],
     featured: false,
     bestseller: false,
     dateAdded: "2026-09-12",
@@ -1702,7 +1641,7 @@ const PRODUCTS = [
     brand: "medisupply",
     category: "disposables",
     subcategory: "Cannula",
-    price: 150,
+    price: 10,
     description: "A micro-cannula for atraumatic delivery of dermal fillers and skin boosters.",
     image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQtLy-Fa3uZ8893AtdqWOzQdg-xTKY5avvXOMSZeKZ4Q8lbkpYxMRucesc&s=10",
     featured: false,
@@ -1738,7 +1677,7 @@ const PRODUCTS = [
     dateAdded: "2026-09-14",
     tags: ["filler", "body", "contouring", "lush", "reluma"]
   },
-    {
+  {
     id: "reluma-volumie",
     name: "Reluma Volumie",
     brand: "reluma",
@@ -1752,7 +1691,7 @@ const PRODUCTS = [
     dateAdded: "2026-09-14",
     tags: ["filler", "body", "contouring", "volumie", "reluma"]
   },
-    {
+  {
     id: "reluma-glisse",
     name: "Reluma Glisse",
     brand: "reluma",
@@ -1766,7 +1705,7 @@ const PRODUCTS = [
     dateAdded: "2026-09-14",
     tags: ["filler", "body", "contouring", "glisse", "reluma"]
   },
-    {
+  {
     id: "reluma-implant-1-1ml",
     name: "Reluma Implant (1.1ml)",
     brand: "reluma",
@@ -1780,7 +1719,7 @@ const PRODUCTS = [
     dateAdded: "2026-09-14",
     tags: ["filler", "body", "contouring", "implant", "reluma", "1.1ml"]
   },
-    {
+  {
     id: "reluma-kiss-1-x-1-1ml",
     name: "Reluma Kiss (1 x 1.1ml)",
     brand: "reluma",
@@ -1794,7 +1733,7 @@ const PRODUCTS = [
     dateAdded: "2026-09-14",
     tags: ["filler", "body", "contouring", "kiss", "reluma", "1 x 1.1ml"]
   },
-    {
+  {
     id: "axeniq-100ui",
     name: "AxeniQ 100UI",
     brand: "axeniq",
