@@ -246,6 +246,8 @@ const CartPage = {
         if (!items.length) { e.preventDefault(); return; }
         if (!this.validate()) { e.preventDefault(); return; }
         this.checkoutBtn.href = this.buildWhatsappLink(items);
+        Cart.clear();
+        this.render();
       });
     }
 
