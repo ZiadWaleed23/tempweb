@@ -136,11 +136,24 @@ const SITE_CONFIG = {
   },
 
   // ---------------------------------------------------------------------
-  // SHIPPING — flat fee below the threshold, free at/above it.
-  // Change these two numbers only; the cart page reads from here.
+  // BULK DISCOUNT — subtotal discount that kicks in once the order
+  // reaches "threshold". Change these two numbers only; the cart page
+  // reads from here.
   // ---------------------------------------------------------------------
-  shipping: {
-    freeThreshold: 25000,   // order subtotal (EGP) that unlocks free shipping
-    fee: 400                 // flat shipping fee (EGP) below the threshold
+  discount: {
+    threshold: 50000,   // order subtotal (EGP) needed to unlock the discount
+    percent: 5           // % discount applied to the subtotal once unlocked
+  },
+
+  // ---------------------------------------------------------------------
+  // ORDER SYNC — sends a copy of every order to an external endpoint
+  // (e.g. a Google Sheets Web App) at the same time the WhatsApp message
+  // is prepared. Set enabled to false to turn this off completely.
+  // Paste the "Web app URL" you get after deploying the Apps Script
+  // (see GOOGLE_SHEETS_SETUP.md) into webhookUrl below.
+  // ---------------------------------------------------------------------
+  orderSync: {
+    enabled: true,
+    webhookUrl: "https://script.google.com/macros/s/AKfycbweJljf289hmXqwMwPPQM3adOfLHVZOoRUiy5PPuIK0zxTdG99Adxx3FjJFqTkdhZ9nDQ/exec"
   }
 };

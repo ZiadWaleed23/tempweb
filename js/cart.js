@@ -18,12 +18,10 @@ const CartPage = {
     this.countEl = $("#cart-item-count");
     this.checkoutBtn = $("#cart-checkout-btn");
     this.subtotalEl = $("#cart-subtotal");
-    this.shippingEl = $("#cart-shipping");
     this.totalEl = $("#cart-total");
     this.totalNoteEl = $("#cart-total-note");
-    this.shippingProgressEl = $("#shipping-progress");
-    this.shippingProgressMsgEl = $("#shipping-progress-msg");
-    this.shippingProgressFillEl = $("#shipping-progress-fill");
+    this.discountRowEl = $("#cart-discount-row");
+    this.discountEl = $("#cart-discount");
     if (!this.listEl) return; // only run on cart.html
 
     this.fields = {
@@ -67,11 +65,11 @@ const CartPage = {
     return { total, unpriced, units };
   },
 
-  /* Flat fee below SITE_CONFIG.shipping.freeThreshold, free at/above it. */
-  getShipping(subtotal) {
-    const cfg = SITE_CONFIG.shipping;
-    if (!cfg) return 0;
-    return subtotal >= cfg.freeThreshold ? 0 : cfg.fee;
+  /* % discount on the subtotal once SITE_CONFIG.discount.threshold is reached. */
+  getDiscount(subtotal) {
+    const cfg = SITE_CONFIG.discount;
+    if (!cfg || subtotal < cfg.threshold) return 0;
+    return Math.round(subtotal * (cfg.percent / 100));
   },
 
   /* ------------------------------------------------------------------
@@ -131,7 +129,7 @@ const CartPage = {
   updateSummary(items) {
     items = items || this.getItems();
     const { total, unpriced, units } = this.totals(items);
-    const shipping = this.getShipping(total);
+    const discount = this.getDiscount(total);
     const hasPricedTotal = total > 0 || !unpriced;
 
     if (this.countEl) {
@@ -140,37 +138,20 @@ const CartPage = {
     if (this.subtotalEl) {
       this.subtotalEl.textContent = hasPricedTotal ? formatPrice(total) : formatPrice(null);
     }
-    if (this.shippingEl) {
-      this.shippingEl.textContent = !hasPricedTotal ? "\u2014" : shipping === 0 ? "Free" : formatPrice(shipping);
+    if (this.discountRowEl) {
+      this.discountRowEl.hidden = !hasPricedTotal || discount <= 0;
+    }
+    if (this.discountEl) {
+      this.discountEl.textContent = discount > 0 ? `-${formatPrice(discount)}` : formatPrice(0);
     }
     if (this.totalEl) {
-      this.totalEl.textContent = hasPricedTotal ? formatPrice(total + shipping) : formatPrice(null);
+      this.totalEl.textContent = hasPricedTotal ? formatPrice(total - discount) : formatPrice(null);
     }
     if (this.totalNoteEl) {
       this.totalNoteEl.textContent = unpriced
         ? `${unpriced} item${unpriced === 1 ? " is" : "s are"} priced on request and not included in this total.`
         : "";
       this.totalNoteEl.hidden = !unpriced;
-    }
-    this.updateShippingProgress(total);
-  },
-
-  /* Fills the "free shipping" bar and updates its message as the
-     subtotal approaches SITE_CONFIG.shipping.freeThreshold. */
-  updateShippingProgress(subtotal) {
-    const cfg = SITE_CONFIG.shipping;
-    if (!cfg || !this.shippingProgressFillEl || !this.shippingProgressMsgEl) return;
-
-    const remaining = cfg.freeThreshold - subtotal;
-    const pct = Math.max(0, Math.min(100, (subtotal / cfg.freeThreshold) * 100));
-    this.shippingProgressFillEl.style.width = `${pct}%`;
-
-    if (remaining <= 0) {
-      this.shippingProgressMsgEl.innerHTML = `You&rsquo;ve unlocked <strong>free shipping</strong>!`;
-      if (this.shippingProgressEl) this.shippingProgressEl.classList.add("shipping-progress--complete");
-    } else {
-      this.shippingProgressMsgEl.innerHTML = `Add <strong>${formatPrice(remaining)}</strong> more to get free shipping`;
-      if (this.shippingProgressEl) this.shippingProgressEl.classList.remove("shipping-progress--complete");
     }
   },
 
@@ -240,12 +221,14 @@ const CartPage = {
     });
 
     // WhatsApp button: validate first, then open the pre-filled chat
+    // (also fires an order-sync copy to the external endpoint, if configured)
     if (this.checkoutBtn) {
       this.checkoutBtn.addEventListener("click", e => {
         const items = this.getItems();
         if (!items.length) { e.preventDefault(); return; }
         if (!this.validate()) { e.preventDefault(); return; }
         this.checkoutBtn.href = this.buildWhatsappLink(items);
+        this.sendOrderToExternalSite(items);
         Cart.clear();
         this.render();
       });
@@ -318,7 +301,7 @@ const CartPage = {
   buildWhatsappLink(items) {
     const f = key => this.fields[key].value.trim();
     const { total, unpriced } = this.totals(items);
-    const shipping = this.getShipping(total);
+    const discount = this.getDiscount(total);
 
     const orderLines = items.map(({ product, qty }, i) => {
       const price = getPrice(product);
@@ -334,8 +317,8 @@ const CartPage = {
       f("notes") ? `Notes: ${f("notes")}` : null
     ].filter(Boolean);
 
-    const shippingLine = `Shipping: ${shipping === 0 ? "Free" : formatPrice(shipping)}`;
-    let totalLine = `*Total: ${formatPrice(total + shipping)}*`;
+    const discountLine = discount > 0 ? `Discount (${SITE_CONFIG.discount.percent}%): -${formatPrice(discount)}` : null;
+    let totalLine = `*Total: ${formatPrice(total - discount)}*`;
     if (unpriced) totalLine += ` (+ ${unpriced} item${unpriced === 1 ? "" : "s"} priced on request)`;
 
     const message = [
@@ -347,11 +330,65 @@ const CartPage = {
       "*Order*",
       ...orderLines,
       "",
-      shippingLine,
+      discountLine,
       totalLine
-    ].join("\n");
+    ].filter(line => line !== null).join("\n");
 
     return `${SITE_CONFIG.contact.whatsappLink}?text=${encodeURIComponent(message)}`;
+  },
+
+  /* ------------------------------------------------------------------
+     Order sync — sends a copy of the order to an external endpoint
+     (see SITE_CONFIG.orderSync). Fire-and-forget: it never blocks or
+     interrupts the WhatsApp checkout flow, and any failure (offline,
+     bad URL, endpoint down) is swallowed silently so the customer's
+     order still goes through via WhatsApp either way.
+     ------------------------------------------------------------------ */
+  sendOrderToExternalSite(items) {
+    const cfg = SITE_CONFIG.orderSync;
+    if (!cfg || !cfg.enabled || !cfg.webhookUrl || cfg.webhookUrl.includes("PASTE_YOUR")) return;
+
+    const f = key => this.fields[key].value.trim();
+    const { total, unpriced } = this.totals(items);
+    const discount = this.getDiscount(total);
+
+    const payload = {
+      timestamp: new Date().toISOString(),
+      customer: {
+        name: f("name"),
+        phone: f("phone"),
+        email: f("email"),
+        address: f("address"),
+        notes: f("notes")
+      },
+      items: items.map(({ product, qty }) => {
+        const price = getPrice(product);
+        return {
+          id: product.id,
+          name: product.name,
+          brand: getBrandById(product.brand),
+          qty,
+          unitPrice: price,
+          lineTotal: price === null ? null : price * qty
+        };
+      }),
+      unpricedItems: unpriced,
+      subtotal: total,
+      discount,
+      total: total - discount
+    };
+
+    try {
+      // text/plain avoids a CORS preflight on Google Apps Script Web Apps;
+      // mode: "no-cors" means we can't read the response, which is fine
+      // here since we don't need one.
+      fetch(cfg.webhookUrl, {
+        method: "POST",
+        mode: "no-cors",
+        headers: { "Content-Type": "text/plain;charset=utf-8" },
+        body: JSON.stringify(payload)
+      }).catch(() => { /* ignore network errors — WhatsApp flow still works */ });
+    } catch (e) { /* ignore — never block checkout because of this */ }
   }
 };
 
