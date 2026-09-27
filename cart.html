@@ -70,20 +70,13 @@
       <aside class="cart-summary" id="cart-summary">
         <h3>Order Summary</h3>
 
-        <div class="shipping-progress" id="shipping-progress">
-          <p class="shipping-progress__msg" id="shipping-progress-msg" aria-live="polite"></p>
-          <div class="shipping-progress__track">
-            <div class="shipping-progress__fill" id="shipping-progress-fill"></div>
-          </div>
-        </div>
-
         <div class="cart-line-row">
           <span>Subtotal</span>
           <strong id="cart-subtotal">&mdash;</strong>
         </div>
-        <div class="cart-line-row">
-          <span>Shipping</span>
-          <strong id="cart-shipping">&mdash;</strong>
+        <div class="cart-line-row" id="cart-discount-row" hidden>
+          <span>Discount</span>
+          <strong id="cart-discount">&mdash;</strong>
         </div>
 
         <div class="cart-total">
