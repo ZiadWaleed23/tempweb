@@ -27,7 +27,7 @@ I18N.add("ar", {
   elio_is_a_curated_portfolio_of: "Elio مجموعة مختارة بعناية من منتجات التجميل والعناية الجمالية الاحترافية للعيادات ومتخصصي العناية بالبشرة.",
   products_elio: "المنتجات — Elio",
   browse_the_full_elio_professional_aesthetic: "تصفّح كتالوج Elio الكامل لمنتجات التجميل والعناية الجمالية الاحترافية.",
-  your_cart_elio: "سلتك — Elio",
+  your_cart_elio: "عربتك — Elio",
   review_the_products_you_ve_added: "راجع المنتجات التي أضفتها وأرسل طلبك إلى Elio.",
   about_us_elio: "من نحن — Elio",
   learn_about_elio_s_mission_values: "تعرّف على رسالة Elio وقيمها ونهجها في انتقاء منتجات التجميل الاحترافية.",
@@ -48,7 +48,7 @@ I18N.add("ar", {
   about_us: "من نحن",
   contact: "تواصل معنا",
   search_products: "ابحث في المنتجات",
-  view_cart: "عرض السلة",
+  view_cart: "عرض العربة",
   back_to_top: "العودة للأعلى",
   quick_links: "روابط سريعة",
   privacy_policy: "سياسة الخصوصية",
@@ -114,11 +114,11 @@ I18N.add("ar", {
   can_t_find_what_you_re: "لا تجد ما تبحث عنه، أو تحتاج مزيدًا من المعلومات عن طلب احترافي؟",
 
   /* cart page */
-  cart: "السلة",
-  your_cart: "سلتك",
-  loading_your_cart: "جارٍ تحميل سلتك…",
+  cart: "العربة",
+  your_cart: "عربتك",
+  loading_your_cart: "جارٍ تحميل عربتك…",
   your_next_favorite_product_is_waiting: "منتجك المفضل التالي في انتظارك..",
-  browse_the_catalog_and_tap_the: "تصفّح الكتالوج واضغط على أيقونة السلة في أي منتج لإضافته هنا.",
+  browse_the_catalog_and_tap_the: "تصفّح الكتالوج واضغط على أيقونة العربة في أي منتج لإضافته هنا.",
   browse_products: "تصفّح المنتجات",
   order_summary: "ملخص الطلب",
   subtotal: "المجموع الفرعي",
@@ -241,7 +241,7 @@ I18N.add("en", {
 I18N.add("ar", {
   "js.bestseller": "الأكثر مبيعًا",
   "js.featured": "مميز",
-  "js.add_to_cart_aria": "أضف {name} إلى السلة",
+  "js.add_to_cart_aria": "أضف {name} إلى العربة",
   "js.view_product": "عرض المنتج",
   "js.empty_title": "لا توجد منتجات مطابقة لبحثك.",
   "js.empty_body": "جرّب تعديل الفلاتر أو كلمات البحث.",
@@ -253,8 +253,8 @@ I18N.add("ar", {
   "js.pro_notice": "للاستخدام المهني فقط. يخضع التوفر والاستخدام للوائح المعمول بها.",
   "js.request_info": "اطلب معلومات عن المنتج",
   "js.wa_info_msg": "أرغب في معلومات أكثر عن: ",
-  "js.add_to_cart": "أضف إلى السلة",
-  "js.added_to_cart": "تمت الإضافة إلى السلة",
+  "js.add_to_cart": "أضف إلى العربة",
+  "js.added_to_cart": "تمت الإضافة إلى العربة",
   "js.browse": "تصفّح",
 
   "price.on_request": "السعر عند الطلب",
@@ -281,11 +281,11 @@ I18N.add("ar", {
   "search.view_all": "عرض كل النتائج ({n})",
 
   "cart.empty_count": "منتجك المفضل التالي في انتظارك.",
-  "cart.items.zero": "سلتك فارغة",
-  "cart.items.one": "منتج واحد في سلتك",
-  "cart.items.two": "منتجان في سلتك",
-  "cart.items.few": "{n} منتجات في سلتك",
-  "cart.items.other": "{n} منتج في سلتك",
+  "cart.items.zero": "عربتك فارغة",
+  "cart.items.one": "منتج واحد في عربتك",
+  "cart.items.two": "منتجان في عربتك",
+  "cart.items.few": "{n} منتجات في عربتك",
+  "cart.items.other": "{n} منتج في عربتك",
   "cart.unpriced.one": "منتج واحد سعره عند الطلب وغير محتسب ضمن هذا الإجمالي.",
   "cart.unpriced.two": "منتجان سعرهما عند الطلب وغير محتسبين ضمن هذا الإجمالي.",
   "cart.unpriced.few": "{n} منتجات أسعارها عند الطلب وغير محتسبة ضمن هذا الإجمالي.",
@@ -295,7 +295,7 @@ I18N.add("ar", {
   "cart.dec": "تقليل الكمية",
   "cart.inc": "زيادة الكمية",
   "cart.remove": "إزالة",
-  "cart.remove_aria": "إزالة {name} من السلة",
+  "cart.remove_aria": "إزالة {name} من العربة",
   "cart.err_name": "يرجى إدخال اسمك الكامل.",
   "cart.err_phone": "يرجى إدخال رقم هاتف صحيح (من 8 إلى 15 رقمًا).",
   "cart.err_email": "يرجى إدخال بريد إلكتروني صحيح.",
@@ -316,5 +316,5 @@ I18N.add("ar", {
   "wa.unpriced.few": " (+ {n} منتجات أسعارها عند الطلب)",
   "wa.unpriced.other": " (+ {n} منتجًا أسعارها عند الطلب)",
 
-  "js.cleared": "تم مسح السلة وبيانات إتمام الطلب المحفوظة."
+  "js.cleared": "تم مسح العربة وبيانات إتمام الطلب المحفوظة."
 });

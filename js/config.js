@@ -26,18 +26,18 @@ const SITE_CONFIG = {
   // ---------------------------------------------------------------------
   contact: {
     email: "hello@elio.com",
-    phone: "+971 4 880 7659",
-    whatsapp: "+971 50 900 7659",
-    whatsappLink: "https://wa.me/971509007659",
+    phone: "+201050208206",
+    whatsapp: "+201050208206",
+    whatsappLink: "https://wa.me/201050208206",
     location: "Hadaek Al-Ahram - 118",
     location_ar: "حدائق الأهرام - 118",
-    hours: "Sun – Thu, 10 A.M – 8 P.M",
-    hours_ar: "الأحد – الخميس، 10 ص – 8 م"
+    hours: "Sun – Thu, 10 A.M – 10 P.M",
+    hours_ar: "الأحد – الخميس، 10 ص – 10 م"
   },
 
   social: {
-    instagram: "https://instagram.com/elio",
-    facebook: "https://facebook.com/elio",
+    instagram: "https://www.instagram.com/elio.cosmetics/",
+    facebook: "https://www.facebook.com/elio.cosmetic/",
     linkedin: "https://linkedin.com/company/elio"
   },
 
