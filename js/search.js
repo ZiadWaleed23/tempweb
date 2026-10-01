@@ -57,33 +57,29 @@ const GlobalSearch = {
   },
 
   runSearch() {
-    const term = (this.input?.value || "").trim().toLowerCase();
+    const rawTerm = (this.input?.value || "").trim();
+    const term = I18N.normalize(rawTerm);
 
     if (!term) {
       this.resultsEl.innerHTML = "";
-      this.countEl.textContent = "Start typing to search products, brands and categories.";
+      this.countEl.textContent = t("search.hint");
       return;
     }
 
-    const matches = PRODUCTS.filter(p => {
-      const brandName = getBrandById(p.brand).toLowerCase();
-      const catName = (getCategoryById(p.category)?.name || "").toLowerCase();
-      const haystack = [p.name, brandName, catName, p.subcategory, ...(p.tags || [])].join(" ").toLowerCase();
-      return haystack.includes(term);
-    });
+    const matches = PRODUCTS.filter(p => productSearchText(p).includes(term));
 
     if (!matches.length) {
-      this.countEl.textContent = "No products matched your search.";
+      this.countEl.textContent = t("search.none_title");
       this.resultsEl.innerHTML = `
         <div class="empty-state">
-          <p class="empty-state__title">No products matched your search.</p>
-          <p class="empty-state__body">Try a different keyword, brand or category name.</p>
+          <p class="empty-state__title">${t("search.none_title")}</p>
+          <p class="empty-state__body">${t("search.none_body")}</p>
         </div>
       `;
       return;
     }
 
-    this.countEl.textContent = `${matches.length} result${matches.length === 1 ? "" : "s"} found`;
+    this.countEl.textContent = I18N.plural("search.found", matches.length);
     const shown = matches.slice(0, this.MAX_RESULTS);
 
     this.resultsEl.innerHTML = shown.map(p => `
@@ -91,12 +87,12 @@ const GlobalSearch = {
         <img src="${p.image}" alt="${p.name}" loading="lazy">
         <span class="search-result__text">
           <strong>${p.name}</strong>
-          <em>${getBrandById(p.brand)} &nbsp;·&nbsp; ${getCategoryById(p.category)?.name || ""}</em>
+          <em>${getBrandById(p.brand)} &nbsp;·&nbsp; ${catName(getCategoryById(p.category))}</em>
         </span>
       </button>
     `).join("") + (matches.length > this.MAX_RESULTS ? `
-      <a class="search-result search-result--all" href="products.html?search=${encodeURIComponent(term)}">
-        View all ${matches.length} results &rarr;
+      <a class="search-result search-result--all" href="products.html?search=${encodeURIComponent(rawTerm)}">
+        ${t("search.view_all", { n: matches.length })} <span class="search-result__arrow" aria-hidden="true">&rarr;</span>
       </a>` : "");
   }
 };

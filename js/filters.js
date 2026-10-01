@@ -76,9 +76,9 @@ const Catalog = {
   renderSidebarCategoryList() {
     const list = this.els.categoryList;
     if (!list) return;
-    const all = `<li><button class="filter-pill ${this.state.category === "all" ? "is-active" : ""}" data-category="all">All Categories</button></li>`;
+    const all = `<li><button class="filter-pill ${this.state.category === "all" ? "is-active" : ""}" data-category="all">${t("js.all_categories")}</button></li>`;
     const items = SITE_CONFIG.categories.map(cat => `
-      <li><button class="filter-pill ${this.state.category === cat.id ? "is-active" : ""}" data-category="${cat.id}">${cat.name}</button></li>
+      <li><button class="filter-pill ${this.state.category === cat.id ? "is-active" : ""}" data-category="${cat.id}">${catName(cat)}</button></li>
     `).join("");
     list.innerHTML = all + items;
   },
@@ -86,7 +86,7 @@ const Catalog = {
   renderSidebarBrandList() {
     const list = this.els.brandList;
     if (!list) return;
-    const all = `<li><label class="filter-check"><input type="radio" name="brand" value="all" ${this.state.brand === "all" ? "checked" : ""}> All Brands</label></li>`;
+    const all = `<li><label class="filter-check"><input type="radio" name="brand" value="all" ${this.state.brand === "all" ? "checked" : ""}> ${t("js.all_brands")}</label></li>`;
     const items = SITE_CONFIG.brands.map(b => `
       <li><label class="filter-check"><input type="radio" name="brand" value="${b.id}" ${this.state.brand === b.id ? "checked" : ""}> ${b.name}</label></li>
     `).join("");
@@ -232,19 +232,14 @@ const Catalog = {
 
   getFiltered() {
     const s = this.state;
-    const term = s.search.trim().toLowerCase();
+    const term = I18N.normalize(s.search.trim());
 
     let list = PRODUCTS.filter(p => {
       if (s.category !== "all" && p.category !== s.category) return false;
       if (s.brand !== "all" && p.brand !== s.brand) return false;
       if (s.featuredOnly && !p.featured) return false;
       if (s.bestsellerOnly && !p.bestseller) return false;
-      if (term) {
-        const brandName = getBrandById(p.brand).toLowerCase();
-        const haystack = [p.name, brandName, p.category, p.subcategory, ...(p.tags || [])]
-          .join(" ").toLowerCase();
-        if (!haystack.includes(term)) return false;
-      }
+      if (term && !productSearchText(p).includes(term)) return false;
       return true;
     });
 
@@ -270,11 +265,11 @@ const Catalog = {
   renderChips() {
     const s = this.state;
     const chips = [];
-    if (s.search) chips.push({ key: "search", label: `Search: "${s.search}"` });
-    if (s.category !== "all") chips.push({ key: "category", label: getCategoryById(s.category)?.name || s.category });
+    if (s.search) chips.push({ key: "search", label: t("js.chip_search", { term: s.search }) });
+    if (s.category !== "all") chips.push({ key: "category", label: catName(getCategoryById(s.category)) || s.category });
     if (s.brand !== "all") chips.push({ key: "brand", label: getBrandById(s.brand) });
-    if (s.featuredOnly) chips.push({ key: "featured", label: "Featured" });
-    if (s.bestsellerOnly) chips.push({ key: "bestseller", label: "Bestseller" });
+    if (s.featuredOnly) chips.push({ key: "featured", label: t("js.featured") });
+    if (s.bestsellerOnly) chips.push({ key: "bestseller", label: t("js.bestseller") });
 
     if (!this.els.chips) return;
     if (!chips.length) {
@@ -295,7 +290,7 @@ const Catalog = {
     const visible = filtered.slice(0, this.state.visibleCount);
 
     if (this.els.count) {
-      this.els.count.textContent = `${filtered.length} product${filtered.length === 1 ? "" : "s"}`;
+      this.els.count.textContent = I18N.plural("count.products", filtered.length);
     }
 
     renderProductGridInto(this.els.grid, visible);
@@ -305,7 +300,7 @@ const Catalog = {
       const hasMore = this.state.visibleCount < filtered.length;
       this.els.loadMoreBtn.style.display = hasMore ? "inline-flex" : "none";
       this.els.loadMoreBtn.textContent = hasMore
-        ? `Load More (${filtered.length - this.state.visibleCount} remaining)`
+        ? t("js.load_more", { n: filtered.length - this.state.visibleCount })
         : "";
     }
 

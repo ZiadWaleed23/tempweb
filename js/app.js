@@ -20,6 +20,43 @@ function getBrandById(id) {
 }
 
 /* -------------------------------------------------------------------------
+   Language helpers (the engine itself is js/i18n.js)
+   Brand names and product names always stay in English.
+   ------------------------------------------------------------------------- */
+const t = (key, vars) => I18N.t(key, vars);
+
+function catName(cat) { return cat ? I18N.loc(cat, "name") : ""; }
+function catDescription(cat) { return cat ? I18N.loc(cat, "description") : ""; }
+
+/* Arabic description / subcategory of a product (falls back to the English text) */
+function productDescription(p) {
+  if (I18N.isAr && typeof PRODUCT_TEXT_AR !== "undefined") {
+    const ar = PRODUCT_TEXT_AR.descriptions[p.description];
+    if (ar) return ar;
+  }
+  return p.description;
+}
+function productSubcategory(p) {
+  if (I18N.isAr && typeof PRODUCT_TEXT_AR !== "undefined") {
+    const ar = PRODUCT_TEXT_AR.subcategories[p.subcategory];
+    if (ar) return ar;
+  }
+  return p.subcategory;
+}
+
+/* Text used by both search boxes. Always includes the Arabic names too, so
+   Arabic keywords (e.g. "فيلر", "بوتوكس") work even if the page is in English. */
+function productSearchText(p) {
+  const cat = getCategoryById(p.category);
+  const arSub = (typeof PRODUCT_TEXT_AR !== "undefined" && PRODUCT_TEXT_AR.subcategories[p.subcategory]) || "";
+  const arDesc = (typeof PRODUCT_TEXT_AR !== "undefined" && PRODUCT_TEXT_AR.descriptions[p.description]) || "";
+  return I18N.normalize([
+    p.name, getBrandById(p.brand), p.category, p.subcategory, ...(p.tags || []),
+    cat ? cat.name : "", cat ? (cat.name_ar || "") : "", arSub, arDesc
+  ].join(" "));
+}
+
+/* -------------------------------------------------------------------------
    Cart (persisted in localStorage)
    ------------------------------------------------------------------------- */
 const Cart = {
@@ -111,8 +148,8 @@ function buildProductCard(product) {
   const brandName = getBrandById(product.brand);
   const inCart = Cart.has(product.id);
   const badge = product.bestseller
-    ? '<span class="product-badge product-badge--bestseller">Bestseller</span>'
-    : (product.featured ? '<span class="product-badge product-badge--featured">Featured</span>' : "");
+    ? `<span class="product-badge product-badge--bestseller">${t("js.bestseller")}</span>`
+    : (product.featured ? `<span class="product-badge product-badge--featured">${t("js.featured")}</span>` : "");
 
   const card = document.createElement("article");
   card.className = "product-card";
@@ -122,15 +159,15 @@ function buildProductCard(product) {
     <div class="product-card__media">
       <img src="${product.image}" alt="${product.name}" loading="lazy" width="700" height="860">
       ${badge}
-      <button class="cart-btn ${inCart ? "is-active" : ""}" aria-pressed="${inCart}" aria-label="Add ${product.name} to cart" data-cart-id="${product.id}">
+      <button class="cart-btn ${inCart ? "is-active" : ""}" aria-pressed="${inCart}" aria-label="${t("js.add_to_cart_aria", { name: product.name })}" data-cart-id="${product.id}">
         <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><circle cx="9" cy="21" r="1.3"/><circle cx="18" cy="21" r="1.3"/><path d="M2.5 3h2.4l2.3 12.4a2 2 0 002 1.6h8.6a2 2 0 002-1.6L21 7H6"/></svg>
       </button>
     </div>
     <div class="product-card__body">
-      <p class="product-card__eyebrow">${brandName} &nbsp;·&nbsp; ${cat ? cat.name : ""}</p>
+      <p class="product-card__eyebrow">${brandName} &nbsp;·&nbsp; ${catName(cat)}</p>
       <h3 class="product-card__title">${product.name}</h3>
       ${priceMarkup(product, "product-card__price")}
-      <button class="btn btn--outline btn--small product-card__view" data-view-id="${product.id}">View Product</button>
+      <button class="btn btn--outline btn--small product-card__view" data-view-id="${product.id}">${t("js.view_product")}</button>
     </div>
   `;
   return card;
@@ -142,8 +179,8 @@ function renderProductGridInto(container, products, { emptyMessage } = {}) {
     const empty = document.createElement("div");
     empty.className = "empty-state";
     empty.innerHTML = `
-      <p class="empty-state__title">${emptyMessage || "No products matched your search."}</p>
-      <p class="empty-state__body">Try adjusting your filters or search terms.</p>
+      <p class="empty-state__title">${emptyMessage || t("js.empty_title")}</p>
+      <p class="empty-state__body">${t("js.empty_body")}</p>
     `;
     container.appendChild(empty);
     return;
@@ -165,7 +202,7 @@ function ensureModalScaffold() {
   modal.innerHTML = `
     <div class="modal__backdrop" data-modal-close></div>
     <div class="modal__panel" role="dialog" aria-modal="true" aria-labelledby="modal-title">
-      <button class="modal__close" data-modal-close aria-label="Close product details">&times;</button>
+      <button class="modal__close" data-modal-close aria-label="${t("js.close_details")}">&times;</button>
       <div class="modal__content"></div>
     </div>
   `;
@@ -196,29 +233,29 @@ function openProductModal(productId) {
         </div>
         ${gallery.length > 1 ? `
         <div class="modal-product__thumbs">
-          ${gallery.map((g, i) => `<button class="modal-thumb ${i === 0 ? "is-active" : ""}" data-thumb-src="${g}"><img src="${g}" alt="${product.name} view ${i + 1}"></button>`).join("")}
+          ${gallery.map((g, i) => `<button class="modal-thumb ${i === 0 ? "is-active" : ""}" data-thumb-src="${g}"><img src="${g}" alt="${t("js.thumb_alt", { name: product.name, n: i + 1 })}"></button>`).join("")}
         </div>` : ""}
       </div>
       <div class="modal-product__info">
-        <p class="modal-product__eyebrow">${brandName} &nbsp;·&nbsp; ${cat ? cat.name : ""}</p>
+        <p class="modal-product__eyebrow">${brandName} &nbsp;·&nbsp; ${catName(cat)}</p>
         <h2 class="modal-product__title" id="modal-title">${product.name}</h2>
         ${priceMarkup(product, "modal-product__price")}
-        <p class="modal-product__desc">${product.description}</p>
+        <p class="modal-product__desc">${productDescription(product)}</p>
 
         <table class="modal-product__specs">
           <tbody>
-            <tr><th>Brand</th><td>${brandName}</td></tr>
-            <tr><th>Category</th><td>${cat ? cat.name : ""}</td></tr>
-            <tr><th>Subcategory</th><td>${product.subcategory}</td></tr>
+            <tr><th>${t("js.spec_brand")}</th><td>${brandName}</td></tr>
+            <tr><th>${t("js.spec_category")}</th><td>${catName(cat)}</td></tr>
+            <tr><th>${t("js.spec_subcategory")}</th><td>${productSubcategory(product)}</td></tr>
           </tbody>
         </table>
 
-        <p class="modal-product__notice">For professional use only. Availability and use are subject to applicable regulations.</p>
+        <p class="modal-product__notice">${t("js.pro_notice")}</p>
 
         <div class="modal-product__actions">
-          <a href="${SITE_CONFIG.contact.whatsappLink}?text=${encodeURIComponent("I would like more information about: " + product.name)}" target="_blank" rel="noopener" class="btn btn--primary">Request Product Information</a>
+          <a href="${SITE_CONFIG.contact.whatsappLink}?text=${encodeURIComponent(t("js.wa_info_msg") + product.name)}" target="_blank" rel="noopener" class="btn btn--primary">${t("js.request_info")}</a>
           <button class="btn btn--outline cart-btn-inline ${Cart.has(product.id) ? "is-active" : ""}" data-cart-id="${product.id}">
-            ${Cart.has(product.id) ? "Added to Cart" : "Add to Cart"}
+            ${Cart.has(product.id) ? t("js.added_to_cart") : t("js.add_to_cart")}
           </button>
         </div>
       </div>
@@ -251,7 +288,7 @@ document.addEventListener("click", e => {
     document.querySelectorAll(`[data-cart-id="${CSS.escape(cartBtn.dataset.cartId)}"]`).forEach(btn => {
       btn.classList.toggle("is-active", isNowInCart);
       if (btn.classList.contains("cart-btn-inline")) {
-        btn.textContent = isNowInCart ? "Added to Cart" : "Add to Cart";
+        btn.textContent = isNowInCart ? t("js.added_to_cart") : t("js.add_to_cart");
       }
       if (btn.hasAttribute("aria-pressed")) btn.setAttribute("aria-pressed", isNowInCart);
     });
@@ -334,13 +371,13 @@ function renderNavCategories() {
   $$(".js-nav-categories").forEach(container => {
     container.innerHTML = SITE_CONFIG.categories.map(cat => `
       <a href="products.html?category=${cat.id}" class="mega-menu__link">
-        <span>${cat.name}</span>
+        <span>${catName(cat)}</span>
       </a>
     `).join("");
   });
   $$(".js-footer-categories").forEach(container => {
     container.innerHTML = SITE_CONFIG.categories.slice(0, 4).map(cat => `
-      <li><a href="products.html?category=${cat.id}">${cat.name}</a></li>
+      <li><a href="products.html?category=${cat.id}">${catName(cat)}</a></li>
     `).join("");
   });
 }
@@ -350,13 +387,13 @@ function renderNavCategories() {
    ------------------------------------------------------------------------- */
 function injectBrandAndContact() {
   $$(".js-brand-name").forEach(el => el.textContent = SITE_CONFIG.brand.name);
-  $$(".js-brand-tagline").forEach(el => el.textContent = SITE_CONFIG.brand.tagline);
-  $$(".js-brand-desc").forEach(el => el.textContent = SITE_CONFIG.brand.shortDescription);
+  $$(".js-brand-tagline").forEach(el => el.textContent = I18N.loc(SITE_CONFIG.brand, "tagline"));
+  $$(".js-brand-desc").forEach(el => el.textContent = I18N.loc(SITE_CONFIG.brand, "shortDescription"));
   $$(".js-contact-email").forEach(el => { el.textContent = SITE_CONFIG.contact.email; el.href = `mailto:${SITE_CONFIG.contact.email}`; });
   $$(".js-contact-phone").forEach(el => { el.textContent = SITE_CONFIG.contact.phone; el.href = `tel:${SITE_CONFIG.contact.phone.replace(/[^\d+]/g, "")}`; });
   $$(".js-contact-whatsapp").forEach(el => { el.href = SITE_CONFIG.contact.whatsappLink; });
-  $$(".js-contact-location").forEach(el => el.textContent = SITE_CONFIG.contact.location);
-  $$(".js-contact-hours").forEach(el => el.textContent = SITE_CONFIG.contact.hours);
+  $$(".js-contact-location").forEach(el => el.textContent = I18N.loc(SITE_CONFIG.contact, "location"));
+  $$(".js-contact-hours").forEach(el => el.textContent = I18N.loc(SITE_CONFIG.contact, "hours"));
   $$(".js-social-instagram").forEach(el => el.href = SITE_CONFIG.social.instagram);
   $$(".js-social-facebook").forEach(el => el.href = SITE_CONFIG.social.facebook);
   $$(".js-social-linkedin").forEach(el => el.href = SITE_CONFIG.social.linkedin);

@@ -79,7 +79,7 @@ const CartPage = {
     const items = this.getItems();
 
     if (!items.length) {
-      if (this.countEl) this.countEl.textContent = "Your next favorite product is waiting.";
+      if (this.countEl) this.countEl.textContent = t("cart.empty_count");
       this.emptyEl.style.display = "block";
       this.layoutEl.style.display = "none";
       return;
@@ -102,21 +102,21 @@ const CartPage = {
           <img src="${product.image}" alt="${product.name}" loading="lazy" width="200" height="240">
         </a>
         <div class="cart-item__body">
-          <p class="cart-item__eyebrow">${brandName} &nbsp;·&nbsp; ${cat ? cat.name : ""}</p>
+          <p class="cart-item__eyebrow">${brandName} &nbsp;·&nbsp; ${catName(cat)}</p>
           <h3 class="cart-item__title">
             <a href="${url}">${product.name}</a>
           </h3>
-          <p class="cart-item__unit">${price === null ? formatPrice(null) : formatPrice(price) + " each"}</p>
+          <p class="cart-item__unit">${price === null ? formatPrice(null) : t("price.each", { price: formatPrice(price) })}</p>
 
           <div class="cart-item__controls">
-            <div class="qty" role="group" aria-label="Quantity for ${product.name}">
-              <button type="button" class="qty__btn" data-qty-dec="${product.id}" aria-label="Decrease quantity" ${qty <= 1 ? "disabled" : ""}>&minus;</button>
-              <input class="qty__input" type="number" inputmode="numeric" min="1" max="${Cart.MAX_QTY}" value="${qty}" data-qty-input="${product.id}" aria-label="Quantity">
-              <button type="button" class="qty__btn" data-qty-inc="${product.id}" aria-label="Increase quantity" ${qty >= Cart.MAX_QTY ? "disabled" : ""}>+</button>
+            <div class="qty" role="group" aria-label="${t("cart.qty_for", { name: product.name })}">
+              <button type="button" class="qty__btn" data-qty-dec="${product.id}" aria-label="${t("cart.dec")}" ${qty <= 1 ? "disabled" : ""}>&minus;</button>
+              <input class="qty__input" type="number" inputmode="numeric" min="1" max="${Cart.MAX_QTY}" value="${qty}" data-qty-input="${product.id}" aria-label="${t("cart.qty")}">
+              <button type="button" class="qty__btn" data-qty-inc="${product.id}" aria-label="${t("cart.inc")}" ${qty >= Cart.MAX_QTY ? "disabled" : ""}>+</button>
             </div>
-            <button class="cart-item__remove" data-cart-id="${product.id}" aria-label="Remove ${product.name} from cart">
+            <button class="cart-item__remove" data-cart-id="${product.id}" aria-label="${t("cart.remove_aria", { name: product.name })}">
               <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 7h16M9 7V5a2 2 0 012-2h2a2 2 0 012 2v2m2 0-1 13a2 2 0 01-2 2H8a2 2 0 01-2-2L5 7"/></svg>
-              Remove
+              ${t("cart.remove")}
             </button>
           </div>
         </div>
@@ -133,7 +133,7 @@ const CartPage = {
     const hasPricedTotal = total > 0 || !unpriced;
 
     if (this.countEl) {
-      this.countEl.textContent = `${units} item${units === 1 ? "" : "s"} in your cart`;
+      this.countEl.textContent = I18N.plural("cart.items", units);
     }
     if (this.subtotalEl) {
       this.subtotalEl.textContent = hasPricedTotal ? formatPrice(total) : formatPrice(null);
@@ -142,15 +142,14 @@ const CartPage = {
       this.discountRowEl.hidden = !hasPricedTotal || discount <= 0;
     }
     if (this.discountEl) {
-      this.discountEl.textContent = discount > 0 ? `-${formatPrice(discount)}` : formatPrice(0);
+      /* \u200E (LRM) keeps the minus sign on the left of the number in right-to-left pages */
+      this.discountEl.textContent = discount > 0 ? `\u200E-${formatPrice(discount)}` : formatPrice(0);
     }
     if (this.totalEl) {
       this.totalEl.textContent = hasPricedTotal ? formatPrice(total - discount) : formatPrice(null);
     }
     if (this.totalNoteEl) {
-      this.totalNoteEl.textContent = unpriced
-        ? `${unpriced} item${unpriced === 1 ? " is" : "s are"} priced on request and not included in this total.`
-        : "";
+      this.totalNoteEl.textContent = unpriced ? I18N.plural("cart.unpriced", unpriced) : "";
       this.totalNoteEl.hidden = !unpriced;
     }
   },
@@ -250,10 +249,10 @@ const CartPage = {
     address: v => v.trim().length >= 5
   },
   messages: {
-    name:    "Please enter your full name.",
-    phone:   "Please enter a valid phone number (8–15 digits).",
-    email:   "Please enter a valid email address.",
-    address: "Please enter your delivery address."
+    get name()    { return t("cart.err_name"); },
+    get phone()   { return t("cart.err_phone"); },
+    get email()   { return t("cart.err_email"); },
+    get address() { return t("cart.err_address"); }
   },
 
   restoreCustomer() {
@@ -310,24 +309,26 @@ const CartPage = {
     });
 
     const customer = [
-      `Name: ${f("name")}`,
-      `Phone: ${f("phone")}`,
-      `Email: ${f("email")}`,
-      `Address: ${f("address")}`,
-      f("notes") ? `Notes: ${f("notes")}` : null
+      `${t("wa.name")}: ${f("name")}`,
+      `${t("wa.phone")}: ${f("phone")}`,
+      `${t("wa.email")}: ${f("email")}`,
+      `${t("wa.address")}: ${f("address")}`,
+      f("notes") ? `${t("wa.notes")}: ${f("notes")}` : null
     ].filter(Boolean);
 
-    const discountLine = discount > 0 ? `Discount (${SITE_CONFIG.discount.percent}%): -${formatPrice(discount)}` : null;
-    let totalLine = `*Total: ${formatPrice(total - discount)}*`;
-    if (unpriced) totalLine += ` (+ ${unpriced} item${unpriced === 1 ? "" : "s"} priced on request)`;
+    const discountLine = discount > 0
+      ? t("wa.discount", { pct: SITE_CONFIG.discount.percent, amount: formatPrice(discount) })
+      : null;
+    let totalLine = t("wa.total", { amount: formatPrice(total - discount) });
+    if (unpriced) totalLine += I18N.plural("wa.unpriced", unpriced);
 
     const message = [
-      "Hello, I would like to place an order.",
+      t("wa.hello"),
       "",
-      "*Customer details*",
+      t("wa.customer"),
       ...customer,
       "",
-      "*Order*",
+      t("wa.order"),
       ...orderLines,
       "",
       discountLine,

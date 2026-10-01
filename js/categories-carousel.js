@@ -22,12 +22,12 @@
 
     /* ---------- بناء الكروت ---------- */
     const cardsHTML = SITE_CONFIG.categories.map(cat => `
-      <a class="cat-card" href="products.html?category=${encodeURIComponent(cat.id)}" aria-label="${cat.name}">
+      <a class="cat-card" href="products.html?category=${encodeURIComponent(cat.id)}" aria-label="${catName(cat)}">
         <img class="cat-card__img" src="${cat.image}" alt="" loading="lazy" width="900" height="1100">
         <div class="cat-card__body">
-          <h3 class="cat-card__title">${cat.name}</h3>
-          <p class="cat-card__desc">${cat.description || ""}</p>
-          <span class="cat-card__cta">Browse
+          <h3 class="cat-card__title">${catName(cat)}</h3>
+          <p class="cat-card__desc">${catDescription(cat)}</p>
+          <span class="cat-card__cta">${t("js.browse")}
             <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
           </span>
         </div>

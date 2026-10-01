@@ -11,9 +11,13 @@
 
 const PRICE_CONFIG = {
   currency: "EGP",        // shown before the number, e.g. "EGP 4,500"
-  locale: "en-US",        // number formatting (thousands separator)
-  onRequestLabel: "Price on request"
+  currencyAr: "ج.م",      // Arabic site: shown after the number, e.g. "4,500 ج.م"
+  locale: "en-US",        // number formatting (thousands separator) — Western digits in both languages
+  onRequestLabel: "Price on request",
+  onRequestLabelAr: "السعر عند الطلب"
 };
+
+const PRICE_IS_AR = typeof I18N !== "undefined" && I18N.isAr;
 
 /* Accepts a product object or a product id. Returns a number, or null when
    no price is set. */
@@ -26,6 +30,9 @@ function getPrice(productOrId) {
 }
 
 function formatPrice(amount) {
-  if (amount === null || amount === undefined || isNaN(amount)) return PRICE_CONFIG.onRequestLabel;
-  return `${PRICE_CONFIG.currency} ${Number(amount).toLocaleString(PRICE_CONFIG.locale, { maximumFractionDigits: 2 })}`;
+  if (amount === null || amount === undefined || isNaN(amount)) {
+    return PRICE_IS_AR ? PRICE_CONFIG.onRequestLabelAr : PRICE_CONFIG.onRequestLabel;
+  }
+  const num = Number(amount).toLocaleString(PRICE_CONFIG.locale, { maximumFractionDigits: 2 });
+  return PRICE_IS_AR ? `${num} ${PRICE_CONFIG.currencyAr}` : `${PRICE_CONFIG.currency} ${num}`;
 }

@@ -24,7 +24,7 @@
     btn.addEventListener("click", () => {
       try { KEYS.forEach(k => localStorage.removeItem(k)); } catch (e) { /* storage blocked */ }
       document.querySelectorAll(".js-cart-count").forEach(el => { el.textContent = "0"; });
-      if (msg) msg.textContent = "Saved cart and checkout details cleared.";
+      if (msg) msg.textContent = t("js.cleared");
     });
   }
 })();

@@ -25,6 +25,10 @@
     maxTime: 8000,               // حد أمان: يخلص حتى لو في حاجة اتعلقت (ms)
     phases: [[0, "Preparing the catalog"], [35, "Setting up your space"], [75, "Almost there"], [100, "Welcome"]]
   };
+  /* Arabic site: show the status messages in Arabic (language is set by i18n.js, loaded just before this file) */
+  if (window.I18N && I18N.isAr) {
+    CFG.phases = [[0, "نجهّز الكتالوج"], [35, "نُعدّ لك المكان"], [75, "على وشك الانتهاء"], [100, "أهلًا بك"]];
+  }
 
   /* ---------------------------------------------------------------------
      2) شروط التشغيل: أول زيارة بس + مفيش reduced-motion
