@@ -1607,3 +1607,39 @@ input, select, textarea, button { font-size: 1rem; }
   font-weight: 500;
   color: var(--error);
 }
+
+
+/* ---------------------------------------------------------------------
+   LANGUAGE TOGGLE (English / العربية) — sits in the header next to the
+   search and cart buttons. Text is set by js/i18n.js.
+   --------------------------------------------------------------------- */
+.lang-toggle {
+  height: 44px;
+  min-width: 44px;
+  padding: 0 14px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.4);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  border: 1px solid rgba(255,255,255,0.55);
+  color: var(--charcoal);
+  font-family: var(--font-body), "Segoe UI", Tahoma, sans-serif;
+  font-size: 0.86rem;
+  font-weight: 600;
+  line-height: 1;
+  cursor: pointer;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.7),
+    inset 0 -2px 5px rgba(214,90,140,0.08),
+    0 6px 14px rgba(58,42,77,0.1);
+  transition: background .2s var(--ease), box-shadow .2s var(--ease), transform .15s var(--ease);
+}
+.lang-toggle:hover { background: var(--pink); }
+.lang-toggle:active { transform: scale(0.96); }
+.lang-toggle:focus-visible { outline: 2px solid var(--accent-dark); outline-offset: 2px; }
+@media (max-width: 640px) {
+  .lang-toggle { height: 40px; min-width: 40px; padding: 0 11px; font-size: 0.8rem; }
+}
